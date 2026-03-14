@@ -2,6 +2,18 @@
 
 `JsonLens` es la interfaz frontend del proyecto.
 
+## Puertos recomendados
+
+Para evitar conflictos en desarrollo, usa esta convención desde el inicio:
+
+- Backend `adminJsonLens`: `http://localhost:5600`
+- Frontend `JsonLens`: `http://localhost:5700`
+
+Regla práctica:
+
+- Backend: `56xx`
+- Frontend: `57xx`
+
 Su objetivo es ofrecer una herramienta visual, clara y práctica para trabajar con archivos JSON. La aplicación está orientada a facilitar la validación, el formateo, la visualización estructural y la comparación de documentos desde una experiencia sencilla e intuitiva.
 
 ## Funcionalidades previstas
