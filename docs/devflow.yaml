@@ -1,0 +1,245 @@
+# ============================ Workspace ============================
+
+Workspace:
+  name: JSONLENS-PROJECT
+  repositories:
+    JsonLens:
+      path: ./JsonLens
+      role: frontend
+      stack: [React, Vite, JavaScript]
+    adminJsonLens:
+      path: ./adminJsonLens
+      role: backend
+      stack: [Node.js, Express, JavaScript]
+
+# ============================ Management ===========================
+
+Management:
+  trello:
+    usage: Gestion del trabajo por fases con checklists.
+  notion:
+    usage: Documentacion, decisiones tecnicas y base de conocimiento.
+  github:
+    usage: Control de versiones y trabajo por ramas.
+    phase_rule: Cada fase del proyecto corresponde a una feature branch.
+
+# ============================ Git Flow =============================
+
+Git-Flow:
+  applies_to: Cada repositorio por separado.
+
+  git:
+    description: Los comandos Git se ejecutan dentro de cada repositorio, no en la raiz.
+
+  branches:
+    main:
+      role: produccion
+      rules:
+        - Solo contiene codigo estable.
+        - No se trabaja directamente aqui.
+        - Recibe cambios desde dev o hotfix/*.
+
+    dev:
+      role: integracion
+      rules:
+        - Todas las features nacen desde dev.
+        - Los bugfix tambien nacen desde dev.
+        - Cuando dev esta estable se fusiona hacia main.
+
+    feature:
+      pattern: feature/${NAME}
+      source: dev
+      target: dev
+      examples:
+        - feature/1-setup-project
+        - feature/2-json-validation
+        - feature/3-json-formatter
+        - feature/1.2-frontend-setup
+        - feature/1.3-backend-setup
+
+    bugfix:
+      pattern: bugfix/${NAME}
+      source: dev
+      target: dev
+      examples:
+        - bugfix/json-parse-error
+        - bugfix/editor-crash
+
+    hotfix:
+      pattern: hotfix/${NAME}
+      source: main
+      targets:
+        - main
+        - dev
+      examples:
+        - hotfix/security-error
+        - hotfix/api-crash
+
+  commit_convention:
+    format: "type: descripcion corta"
+    types:
+      - feat
+      - fix
+      - docs
+      - refactor
+      - chore
+      - test
+
+  commands:
+    list_branches:
+      description: Listar ramas y limpiar referencias remotas.
+      steps:
+        - git fetch --all --prune
+        - git branch -a
+        - git log --oneline --graph --decorate --all
+
+    create_feature:
+      description: Crear una feature desde dev.
+      steps:
+        - git checkout dev
+        - git pull origin dev
+        - git checkout -b feature/${NAME}
+        - git push -u origin feature/${NAME}
+
+    create_bugfix:
+      description: Crear un bugfix desde dev.
+      steps:
+        - git checkout dev
+        - git pull origin dev
+        - git checkout -b bugfix/${NAME}
+        - git push -u origin bugfix/${NAME}
+
+    create_hotfix:
+      description: Crear un hotfix desde main.
+      steps:
+        - git checkout main
+        - git pull origin main
+        - git checkout -b hotfix/${NAME}
+        - git push -u origin hotfix/${NAME}
+
+    merge_feature_into_dev:
+      description: Fusionar una feature en dev.
+      steps:
+        - git checkout dev
+        - git pull origin dev
+        - git merge feature/${NAME}
+        - git push origin dev
+
+    merge_bugfix_into_dev:
+      description: Fusionar un bugfix en dev.
+      steps:
+        - git checkout dev
+        - git pull origin dev
+        - git merge bugfix/${NAME}
+        - git push origin dev
+
+    merge_dev_into_main:
+      description: Publicar a produccion desde dev.
+      steps:
+        - git checkout main
+        - git pull origin main
+        - git merge dev
+        - git push origin main
+
+    merge_hotfix:
+      description: Aplicar un hotfix tanto en main como en dev.
+      steps:
+        - git checkout main
+        - git pull origin main
+        - git merge hotfix/${NAME}
+        - git push origin main
+        - git checkout dev
+        - git pull origin dev
+        - git merge hotfix/${NAME}
+        - git push origin dev
+
+    publish_current_branch:
+      description: Publicar la rama actual y definir upstream.
+      steps:
+        - git push -u origin HEAD
+
+    restore_stash:
+      description: Recuperar el ultimo stash.
+      steps:
+        - git stash list
+        - git stash show -p
+        - git stash pop
+
+    sync_without_merge:
+      description: Sincronizar referencias sin hacer merge.
+      steps:
+        - git fetch --all --prune
+
+    preview_diff_main_vs_dev:
+      description: Ver cambios pendientes entre main y dev.
+      steps:
+        - git log --oneline --graph dev..main
+
+# ============================ Project Map ==========================
+
+Project_Map:
+  JsonLens:
+    path: ./JsonLens
+    repository_type: git_independiente
+    role: frontend
+    stack:
+      - React
+      - Vite
+      - JavaScript
+    status: base inicial creada y MVP en desarrollo
+    objective:
+      - Pegar o cargar un JSON.
+      - Validarlo y formatearlo.
+      - Visualizar su estructura.
+      - Comparar documentos JSON y mostrar diferencias basicas.
+    branch_focus_examples:
+      - feature/1-setup-project
+      - feature/1.2-frontend-setup
+      - feature/2-json-validation
+      - feature/3-json-formatter
+
+  adminJsonLens:
+    path: ./adminJsonLens
+    repository_type: git_independiente
+    role: backend
+    stack:
+      - Node.js
+      - Express
+      - JavaScript
+    status: fase inicial; dependencia base instalada; scripts aun no definidos
+    objective:
+      - Definir la estructura inicial del proyecto.
+      - Crear app.js y server.js.
+      - Levantar la API.
+      - Recibir, validar, analizar y comparar JSON.
+    branch_focus_examples:
+      - feature/1-setup-project
+      - feature/1.3-backend-setup
+      - feature/2-json-validation
+      - feature/3-json-formatter
+    next_setup_targets:
+      - Agregar scripts dev y start en package.json.
+      - Crear src/controllers, src/routes, src/services, src/utils y src/middlewares.
+      - Configurar el puerto de desarrollo de la API.
+
+# ============================ NPM Scripts ==========================
+
+Npm_scripts:
+  JsonLens:
+    package_json: ./JsonLens/package.json
+    available:
+      install: npm install
+      dev: npm run dev
+      build: npm run build
+      lint: npm run lint
+      preview: npm run preview
+
+  adminJsonLens:
+    package_json: ./adminJsonLens/package.json
+    available:
+      install: npm install
+    pending:
+      - npm run dev
+      - npm run start
+
+# ================================================================
