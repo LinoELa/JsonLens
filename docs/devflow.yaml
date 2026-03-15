@@ -47,15 +47,21 @@ Git-Flow:
         - Cuando dev esta estable se fusiona hacia main.
 
     feature:
+      info: feature = fase |  # osea cuando feature/1 me refiero  a l fase 1 del proyecto, que puede incluir varias tareas o subfeatures. 
       pattern: feature/${NAME}
       source: dev
       target: dev
       examples:
-        - feature/1-setup-project
-        - feature/2-json-validation
-        - feature/3-json-formatter
-        - feature/1.2-frontend-setup
-        - feature/1.3-backend-setup
+        - feature-1/1
+        - feature-1/2
+        - feature-1/3
+        - feature-2/1
+        - feature-2/2
+        - feature-2/3
+        - feature-3/1
+        - feature-3/2
+        - feature-3/3
+        
 
     bugfix:
       pattern: bugfix/${NAME}
