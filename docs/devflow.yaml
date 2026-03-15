@@ -7,10 +7,6 @@ Workspace:
       path: ./JsonLens
       role: frontend
       stack: [React, Vite, JavaScript]
-    adminJsonLens:
-      path: ./adminJsonLens
-      role: backend
-      stack: [Node.js, Express, JavaScript]
 
 # ============================ Management ===========================
 
@@ -32,6 +28,7 @@ Git-Flow:
     description: Los comandos Git se ejecutan dentro de cada repositorio, no en la raiz.
 
   branches:
+
     main:
       role: produccion
       rules:
@@ -47,21 +44,19 @@ Git-Flow:
         - Cuando dev esta estable se fusiona hacia main.
 
     feature:
-      info: feature = fase |  # osea cuando feature/1 me refiero  a l fase 1 del proyecto, que puede incluir varias tareas o subfeatures. 
+      info: feature = fase del proyecto
       pattern: feature/${NAME}
       source: dev
       target: dev
       examples:
-        - feature-1/1
-        - feature-1/2
-        - feature-1/3
-        - feature-2/1
-        - feature-2/2
-        - feature-2/3
-        - feature-3/1
-        - feature-3/2
-        - feature-3/3
-        
+        - feature1/1
+        - feature1/2
+        - feature1/3
+        - feature2/1
+        - feature2/2
+        - feature2/3
+        - feature3/1
+        - feature3/2
 
     bugfix:
       pattern: bugfix/${NAME}
@@ -92,6 +87,7 @@ Git-Flow:
       - test
 
   commands:
+
     list_branches:
       description: Listar ramas y limpiar referencias remotas.
       steps:
@@ -147,105 +143,79 @@ Git-Flow:
         - git merge dev
         - git push origin main
 
-    merge_hotfix:
-      description: Aplicar un hotfix tanto en main como en dev.
-      steps:
-        - git checkout main
-        - git pull origin main
-        - git merge hotfix/${NAME}
-        - git push origin main
-        - git checkout dev
-        - git pull origin dev
-        - git merge hotfix/${NAME}
-        - git push origin dev
-
-    publish_current_branch:
-      description: Publicar la rama actual y definir upstream.
-      steps:
-        - git push -u origin HEAD
-
-    restore_stash:
-      description: Recuperar el ultimo stash.
-      steps:
-        - git stash list
-        - git stash show -p
-        - git stash pop
-
-    sync_without_merge:
-      description: Sincronizar referencias sin hacer merge.
-      steps:
-        - git fetch --all --prune
-
-    preview_diff_main_vs_dev:
-      description: Ver cambios pendientes entre main y dev.
-      steps:
-        - git log --oneline --graph dev..main
-
 # ============================ Project Map ==========================
 
 Project_Map:
-  JsonLens:
-    path: ./JsonLens
-    repository_type: git_independiente
-    role: frontend
-    stack:
-      - React
-      - Vite
-      - JavaScript
-    status: base inicial creada y MVP en desarrollo
-    objective:
-      - Pegar o cargar un JSON.
-      - Validarlo y formatearlo.
-      - Visualizar su estructura.
-      - Comparar documentos JSON y mostrar diferencias basicas.
-    branch_focus_examples:
-      - feature/1-setup-project
-      - feature/1.2-frontend-setup
-      - feature/2-json-validation
-      - feature/3-json-formatter
 
-  adminJsonLens:
-    path: ./adminJsonLens
-    repository_type: git_independiente
-    role: backend
-    stack:
-      - Node.js
-      - Express
-      - JavaScript
-    status: fase inicial; dependencia base instalada; scripts aun no definidos
+  JsonLens:
+    repository: https://github.com/LinoELa/JsonLens.git
+    role: frontend
+    stack: React, Vite, JavaScript
+    status: MVP en desarrollo
+
     objective:
-      - Definir la estructura inicial del proyecto.
-      - Crear app.js y server.js.
-      - Levantar la API.
-      - Recibir, validar, analizar y comparar JSON.
+      - Crear una herramienta web para trabajar con documentos JSON.
+      - Permitir pegar o cargar archivos JSON desde el navegador.
+      - Validar automáticamente si el JSON es correcto.
+      - Formatear y beautificar el JSON para mejorar su lectura.
+      - Visualizar la estructura del JSON en forma jerárquica.
+      - Comparar dos documentos JSON y detectar diferencias.
+      - Mostrar visualmente los cambios entre estructuras JSON.
+      - Construir una interfaz clara y rápida para análisis de JSON.
+
     branch_focus_examples:
-      - feature/1-setup-project
-      - feature/1.3-backend-setup
-      - feature/2-json-validation
-      - feature/3-json-formatter
-    next_setup_targets:
-      - Agregar scripts dev y start en package.json.
-      - Crear src/controllers, src/routes, src/services, src/utils y src/middlewares.
-      - Configurar el puerto de desarrollo de la API.
+      - feature1/1
+      - feature1/2
+      - feature1/3
+      - feature2/1
+      - feature2/2
+      - feature2/3
+      - feature3/1
+      - feature3/2
 
 # ============================ NPM Scripts ==========================
 
-Npm_scripts:
-  JsonLens:
-    package_json: ./JsonLens/package.json
-    available:
-      install: npm install
-      dev: npm run dev
-      build: npm run build
-      lint: npm run lint
-      preview: npm run preview
+Npm_Scripts:
 
-  adminJsonLens:
-    package_json: ./adminJsonLens/package.json
-    available:
-      install: npm install
-    pending:
-      - npm run dev
-      - npm run start
+  JsonLens:
+
+    development:
+      dev: vite # Inicia el servidor de desarrollo con recarga en caliente
+      start: vite # Alias de dev para mantener convenciones
+      preview: vite preview # Previsualiza la build generada
+
+    build:
+      build: vite build # Compila la aplicación para producción
+      serve: vite preview # Sirve la build compilada en local
+      clean: rimraf dist # Limpia la carpeta dist antes de una nueva build
+
+    testing:
+      test: vitest # Ejecuta los tests unitarios
+      test_watch: vitest --watch # Ejecuta tests en modo vigilancia
+      test_coverage: vitest run --coverage # Genera reporte de cobertura
+      test_e2e: playwright test # Tests end to end
+
+    quality:
+      lint: eslint . --ext .js,.jsx # Analiza el código
+      lint_fix: eslint . --fix # Corrige errores automáticamente
+      format: prettier --write . # Formatea el código
+
+    dependencies:
+      deps_audit: npm audit # Escanea vulnerabilidades
+      deps_update: npm-check -u # Actualiza dependencias
+      deps_outdated: npm outdated # Lista dependencias desactualizadas
+
+    docs_and_analysis:
+      analyze: source-map-explorer dist/*.js # Analiza tamaño del bundle
+      env: node -p "process.env" # Muestra variables de entorno
+
+    deploy:
+      deploy: gh-pages -d dist # Despliega en GitHub Pages
+      vercel: vercel --prod # Despliega en Vercel
+      netlify: netlify deploy --prod # Despliega en Netlify
+
+    maintenance:
+      check: npm run lint && npm test # Ejecuta validaciones antes de subir cambios
+      prepare: husky install # Inicializa hooks de Git con Husky
 
 # ================================================================
