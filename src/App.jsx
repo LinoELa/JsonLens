@@ -1,120 +1,140 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
+import { useEffect, useState } from 'react'
 import './App.css'
 
+const API_ENDPOINT = '/api/health'
+
 function App() {
-  const [count, setCount] = useState(0)
+  const [apiState, setApiState] = useState({
+    loading: true,
+    data: null,
+    error: '',
+  })
+
+  async function loadBackendStatus(signal) {
+    setApiState((currentState) => ({
+      ...currentState,
+      loading: true,
+      error: '',
+    }))
+
+    try {
+      const response = await fetch(API_ENDPOINT, { signal })
+
+      if (!response.ok) {
+        throw new Error(`Request failed with status ${response.status}`)
+      }
+
+      const data = await response.json()
+
+      setApiState({
+        loading: false,
+        data,
+        error: '',
+      })
+    } catch (error) {
+      if (error.name === 'AbortError') {
+        return
+      }
+
+      setApiState({
+        loading: false,
+        data: null,
+        error: 'No se pudo conectar con adminJsonLens. Revisa que el backend este corriendo en el puerto 5700.',
+      })
+    }
+  }
+
+  useEffect(() => {
+    const controller = new AbortController()
+
+    loadBackendStatus(controller.signal)
+
+    return () => {
+      controller.abort()
+    }
+  }, [])
+
+  const connectionState = apiState.loading
+    ? 'loading'
+    : apiState.error
+      ? 'error'
+      : 'success'
+
+  const connectionLabel = {
+    loading: 'Consultando backend',
+    error: 'Sin conexion',
+    success: 'Conexion activa',
+  }[connectionState]
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
+    <main className="app-shell">
+      <section className="hero-panel">
+        <div className="hero-copy">
+          <p className="eyebrow">JsonLens + adminJsonLens</p>
+          <h1>React ya esta conectado con Express.</h1>
+          <p className="lead">
+            El frontend consulta <code>{API_ENDPOINT}</code> y Vite redirige la
+            peticion al backend en <code>http://localhost:5700</code>.
           </p>
         </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
+        <div className={`status-pill status-pill--${connectionState}`}>
+          {connectionLabel}
         </div>
       </section>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+      <section className="content-grid">
+        <article className="card">
+          <h2>Conexion actual</h2>
+          <p className="card-copy">
+            Ya no necesitas pegar la URL completa del backend en React. Todas las
+            llamadas a <code>/api</code> pasan por el proxy de Vite en desarrollo.
+          </p>
+
+          <div className="facts">
+            <div className="fact">
+              <span>Frontend</span>
+              <strong>http://localhost:5600</strong>
+            </div>
+            <div className="fact">
+              <span>Backend</span>
+              <strong>http://localhost:5700</strong>
+            </div>
+            <div className="fact">
+              <span>Endpoint</span>
+              <strong>{API_ENDPOINT}</strong>
+            </div>
+          </div>
+
+          <button
+            className="refresh-button"
+            onClick={() => loadBackendStatus()}
+            disabled={apiState.loading}
+          >
+            {apiState.loading ? 'Probando...' : 'Probar conexion otra vez'}
+          </button>
+        </article>
+
+        <article className="card">
+          <h2>Respuesta del backend</h2>
+          <p className="card-copy">
+            Este bloque muestra el JSON real que devuelve Express.
+          </p>
+
+          {apiState.error ? (
+            <p className="error-text">{apiState.error}</p>
+          ) : (
+            <pre>
+              <code>
+                {apiState.loading
+                  ? 'Cargando respuesta del backend...'
+                  : JSON.stringify(apiState.data, null, 2)}
+              </code>
+            </pre>
+          )}
+        </article>
+      </section>
+    </main>
   )
 }
 
