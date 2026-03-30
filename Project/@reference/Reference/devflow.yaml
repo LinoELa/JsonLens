@@ -1,0 +1,303 @@
+# ============================ Workspace ============================
+
+Workspace:
+  name: JSONLENS-PROJECT
+  repositories:
+    JsonLens:
+      path: ./JsonLens
+      role: frontend
+      stack: [React, Vite, JavaScript]
+
+# ============================ Management ===========================
+
+Management:
+  trello:
+    usage: Gestion del trabajo por fases con checklists.
+  notion:
+    usage: Documentacion, decisiones tecnicas y base de conocimiento.
+  github:
+    usage: Control de versiones y trabajo por ramas.
+    phase_rule: Cada fase del proyecto corresponde a una feature branch.
+
+# ============================ Git Flow =============================
+
+Git-Flow:
+  applies_to: Cada repositorio por separado.
+
+  git:
+    description: Los comandos Git se ejecutan dentro de cada repositorio, no en la raiz.
+
+  branches:
+    main:
+      role: produccion
+      rules:
+        - Solo contiene codigo estable.
+        - No se trabaja directamente aqui.
+        - Recibe cambios desde dev o hotfix/*.
+
+    dev:
+      role: integracion
+      rules:
+        - Todas las features nacen desde dev.
+        - Los bugfix tambien nacen desde dev.
+        - Cuando dev esta estable se fusiona hacia main.
+
+    feature:
+      info: feature = fase del proyecto
+      origin: dev (se creade dele dev)
+      pattern: feature-${CICLO}/${NAME}
+      examples:
+        - feature-1/1
+        - feature-1/2
+        - feature-2/1
+        - feature-2/2
+
+    bugfix:
+      pattern: bugfix/${NAME}
+      target: dev
+      examples:
+        - bugfix/json-parse-error
+        - bugfix/editor-crash
+
+    hotfix:
+      pattern: hotfix/${NAME}
+      source: main
+      targets:
+        - main
+        - dev
+      examples:
+        - hotfix/security-error
+        - hotfix/api-crash
+
+  commit_convention:
+    format: "type: descripcion corta"
+    types:
+      - feat
+      - fix
+      - docs
+      - refactor
+      - chore
+      - test
+
+  commands:
+    list_branches:
+      description: Listar ramas y limpiar referencias remotas.
+      steps:
+        - git fetch --all --prune
+        - git branch -a
+        - git log --oneline --graph --decorate --all
+
+    create_feature:
+      description: Crear una feature desde dev.
+      steps:
+        - git checkout dev
+        - git pull origin dev
+        - git checkout -b feature/${NAME}
+        - git push -u origin feature/${NAME}
+
+    create_bugfix:
+      description: Crear un bugfix desde dev.
+      steps:
+        - git checkout dev
+        - git pull origin dev
+        - git checkout -b bugfix/${NAME}
+        - git push -u origin bugfix/${NAME}
+
+    create_hotfix:
+      description: Crear un hotfix desde main.
+      steps:
+        - git checkout main
+        - git pull origin main
+        - git checkout -b hotfix/${NAME}
+        - git push -u origin hotfix/${NAME}
+
+    merge_feature_into_dev:
+      description: Fusionar una feature en dev.
+      steps:
+        - git checkout dev
+        - git pull origin dev
+        - git merge feature/${NAME}
+        - git push origin dev
+
+    merge_bugfix_into_dev:
+      description: Fusionar un bugfix en dev.
+      steps:
+        - git checkout dev
+        - git pull origin dev
+        - git merge bugfix/${NAME}
+        - git push origin dev
+
+    merge_dev_into_main:
+      description: Publicar a produccion desde dev.
+      steps:
+        - git checkout main
+        - git pull origin main
+        - git merge dev
+        - git push origin main
+
+# ============================ Project Map ==========================
+
+Project_Map:
+  JsonLens:
+    repository: https://github.com/LinoELa/JsonLens.git
+    role: frontend
+    stack: React, Vite, JavaScript
+    status: MVP en desarrollo
+
+    objective:
+      - Crear una herramienta web para trabajar con documentos JSON.
+      - Permitir pegar o cargar archivos JSON desde el navegador.
+      - Validar automáticamente si el JSON es correcto.
+      - Formatear y beautificar el JSON para mejorar su lectura.
+      - Visualizar la estructura del JSON en forma jerárquica.
+      - Comparar dos documentos JSON y detectar diferencias.
+      - Mostrar visualmente los cambios entre estructuras JSON.
+      - Construir una interfaz clara y rápida para análisis de JSON.
+
+
+
+# ============================ NPM Scripts ==========================
+
+Npm_Scripts:
+  JsonLens:
+    development:
+      dev: vite # Inicia el servidor de desarrollo con recarga en caliente
+      start: vite # Alias de dev para mantener convenciones
+      preview: vite preview # Previsualiza la build generada
+
+    build:
+      build: vite build # Compila la aplicación para producción
+      serve: vite preview # Sirve la build compilada en local
+      clean: rimraf dist # Limpia la carpeta dist antes de una nueva build
+
+    testing:
+      test: vitest # Ejecuta los tests unitarios
+      test_watch: vitest --watch # Ejecuta tests en modo vigilancia
+      test_coverage: vitest run --coverage # Genera reporte de cobertura
+      test_e2e: playwright test # Tests end to end
+
+    quality:
+      lint: eslint . --ext .js,.jsx # Analiza el código
+      lint_fix: eslint . --fix # Corrige errores automáticamente
+      format: prettier --write . # Formatea el código
+
+    dependencies:
+      deps_audit: npm audit # Escanea vulnerabilidades
+      deps_update: npm-check -u # Actualiza dependencias
+      deps_outdated: npm outdated # Lista dependencias desactualizadas
+
+    docs_and_analysis:
+      analyze: source-map-explorer dist/*.js # Analiza tamaño del bundle
+      env: node -p "process.env" # Muestra variables de entorno
+
+    deploy:
+      deploy: gh-pages -d dist # Despliega en GitHub Pages
+      vercel: vercel --prod # Despliega en Vercel
+      netlify: netlify deploy --prod # Despliega en Netlify
+
+    maintenance:
+      check: npm run lint && npm test # Ejecuta validaciones antes de subir cambios
+      prepare: husky install # Inicializa hooks de Git con Husky
+
+
+# ========================= HTTP Status ==========================
+
+HTTP_Status:
+  success_2xx:
+    - code: 200
+      name: OK
+      use: Request exitoso con respuesta
+    - code: 201
+      name: Created
+      use: Recurso creado exitosamente
+    - code: 204
+      name: No Content
+      use: Operacion exitosa sin body
+
+  redirection_3xx:
+    - code: 301
+      name: Moved Permanently
+      use: URL movida permanentemente
+    - code: 302
+      name: Found
+      use: Redireccion temporal
+    - code: 304
+      name: Not Modified
+      use: Recurso no ha cambiado
+
+  client_error_4xx:
+    - code: 400
+      name: Bad Request
+      use: Datos mal formados o falta un campo
+    - code: 401
+      name: Unauthorized
+      use: Autenticacion requerida
+    - code: 403
+      name: Forbidden
+      use: Acceso denegado
+    - code: 404
+      name: Not Found
+      use: Ruta o recurso no existe
+    - code: 422
+      name: Unprocessable Entity
+      use: Datos validos pero no cumplen contrato
+
+  server_error_5xx:
+    - code: 500
+      name: Internal Server Error
+      use: Error interno del backend
+    - code: 502
+      name: Bad Gateway
+      use: Servidor no disponible
+    - code: 503
+      name: Service Unavailable
+      use: Servicio temporalmente no disponible
+
+  mvp_reference:
+    uses_now: [200, 400, 404, 500]
+    later_possible: [201, 401, 403, 422]
+
+
+    # DevFlow - HTTP Status Codes
+
+## 2xx - Éxito
+
+| Código | Significado | Uso                           |
+| ------ | ----------- | ----------------------------- |
+| `200`  | OK          | Request exitoso con respuesta |
+| `201`  | Created     | Recurso creado exitosamente   |
+| `204`  | No Content  | Operación exitosa sin body    |
+
+## 3xx - Redirección
+
+| Código | Significado       | Uso                        |
+| ------ | ----------------- | -------------------------- |
+| `301`  | Moved Permanently | URL movida permanentemente |
+| `302`  | Found             | Redirección temporal       |
+| `304`  | Not Modified      | Recurso no ha cambiado     |
+
+## 4xx - Error del Cliente
+
+| Código | Significado          | Uso                                    |
+| ------ | -------------------- | -------------------------------------- |
+| `400`  | Bad Request          | Datos mal formados o falta un campo    |
+| `401`  | Unauthorized         | Autenticación requerida                |
+| `403`  | Forbidden            | Acceso denegado (sin permisos)         |
+| `404`  | Not Found            | Ruta o recurso no existe               |
+| `422`  | Unprocessable Entity | Datos válidos pero no cumplen contrato |
+
+## 5xx - Error del Servidor
+
+| Código | Significado           | Uso                                  |
+| ------ | --------------------- | ------------------------------------ |
+| `500`  | Internal Server Error | Error interno del backend            |
+| `502`  | Bad Gateway           | Servidor no disponible               |
+| `503`  | Service Unavailable   | Servicio temporalmente no disponible |
+
+## Referencia Rápida - MVP
+
+- **MVP actual usa**: `200`, `400`, `404`, `500`
+- **Futuro con auth**: `201`, `401`, `403`, `422`
+
+
+# ================================================================
