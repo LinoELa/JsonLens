@@ -6,15 +6,15 @@ Analizador inteligente de JSON. Herramienta para validar, formatear, analizar y 
 
 ## Objetivos
 
-| Feature | Descripción |
-| --- | --- |
-| **Validación** | Detectar errores de formato JSON |
-| **Formateo** | Pretty print, minificar, indentar |
-| **Análisis** | Mostrar estructura en árbol |
-| **Comparación** | Diff entre dos o más JSON |
-| **Diferencias** | Campos añadidos, eliminados, modificados |
-| **Similaridad** | Calcular porcentaje de coincidencia |
-| **Visualización** | UI clara con árbol jerárquico |
+| Feature           | Descripción                              |
+| ----------------- | ---------------------------------------- |
+| **Validación**    | Detectar errores de formato JSON         |
+| **Formateo**      | Pretty print, minificar, indentar        |
+| **Análisis**      | Mostrar estructura en árbol              |
+| **Comparación**   | Diff entre dos o más JSON                |
+| **Diferencias**   | Campos añadidos, eliminados, modificados |
+| **Similaridad**   | Calcular porcentaje de coincidencia      |
+| **Visualización** | UI clara con árbol jerárquico            |
 
 ## Alcance Completo
 
