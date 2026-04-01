@@ -1,5 +1,15 @@
 # JsonLens
 
+Estructura inicial del frontend JsonLens. Contiene módulos, utilidades compartidas y archivos de ejemplo.
+
+Para iniciar (desde la carpeta JsonLens):
+
+```bash
+npm install
+npm run dev
+```
+# JsonLens
+
 `JsonLens` es la interfaz frontend del proyecto.
 
 ## Puertos recomendados

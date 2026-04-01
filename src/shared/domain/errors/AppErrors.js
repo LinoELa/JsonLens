@@ -1,0 +1,1 @@
+// # Error reutilizable en toda la app

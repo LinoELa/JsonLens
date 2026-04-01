@@ -1,10 +1,16 @@
+// ======================= IMPORTS =========================================
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
+import createApp from './app/createApp.jsx'
+
+// ======================= APPLICATION ENTRY ===============================
+
+/**
+ * Punto de entrada principal del frontend.
+ * Monta la aplicacion creada en src/app/createApp.jsx.
+ */
+const application = createApp()
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
+  <StrictMode>{application}</StrictMode>,
 )
