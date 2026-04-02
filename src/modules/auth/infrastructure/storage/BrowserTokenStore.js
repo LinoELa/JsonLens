@@ -1,7 +1,20 @@
-import { localStorageClient } from '../../../shared/infrastructure/browser-storage/localStorageClient.js'
-
+// ======================= TOKEN STORE ======================================
+/**
+ * Almacena tokens en localStorage para persistencia entre sesiones.
+ * Implementa el puerto TokenStore del dominio.
+ */
 export const BrowserTokenStore = {
-  getToken(){ return localStorageClient.get('auth.token') },
-  setToken(t){ localStorageClient.set('auth.token', t) },
-  removeToken(){ localStorageClient.remove('auth.token') }
+  async saveToken(token) {
+    if (!token) throw new Error('Token cannot be empty')
+    localStorage.setItem('auth_token', token)
+  },
+  async getToken() {
+    return localStorage.getItem('auth_token') || null
+  },
+  async removeToken() {
+    localStorage.removeItem('auth_token')
+  },
+  async hasToken() {
+    return !!localStorage.getItem('auth_token')
+  },
 }
