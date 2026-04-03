@@ -11,3 +11,4 @@ export const localStorageClient = {
   remove(key){ localStorage.removeItem(key) }
 }
 //  # Storage web compartido
+

@@ -16,13 +16,13 @@ npm run dev
 
 Para evitar conflictos en desarrollo, usa esta convención desde el inicio:
 
-- Backend `adminJsonLens`: `http://localhost:5600`
-- Frontend `JsonLens`: `http://localhost:5700`
+- Backend `adminJsonLens`: `http://localhost:5700`
+- Frontend `JsonLens`: `http://localhost:5600`
 
 Regla práctica:
 
-- Backend: `56xx`
-- Frontend: `57xx`
+- Backend: `57xx`
+- Frontend: `56xx`
 
 Su objetivo es ofrecer una herramienta visual, clara y práctica para trabajar con archivos JSON. La aplicación está orientada a facilitar la validación, el formateo, la visualización estructural y la comparación de documentos desde una experiencia sencilla e intuitiva.
 

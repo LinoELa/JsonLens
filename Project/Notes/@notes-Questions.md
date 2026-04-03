@@ -1,5 +1,8 @@
 
-## =================  01/04/2026 =================
-## =================  02/04/2026 =================
-## =================  03/04/2026 =================
-## =================  04/04/2026 =================
+## =================  @OBJETIVO  =================
+/**
+ * El objetivo principal de un software developer es : 
+ * - Build Tools
+ * - Resolver problemas
+ * - Crear software que sea útil para los usuarios
+ */

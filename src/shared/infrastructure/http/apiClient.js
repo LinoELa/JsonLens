@@ -1,13 +1,13 @@
 // ======================= IMPORTS =========================================
 // Cliente HTTP centralizado para toda la app
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5700'
+import { API_BASE_URL } from '../../../config/config.js'
 
 // ======================= API CLIENT =======================================
 
 /**
  * Wrapper robusto de fetch para todas las llamadas HTTP.
- * - Gestiona tokens de autenticacion
+ * - Conecta frontend y backend
  * - Maneja errores de forma consistente
  * - Parse automatico de JSON
  */
@@ -22,12 +22,6 @@ export class ApiClient {
     const headers = {
       'Content-Type': 'application/json',
       ...options.headers,
-    }
-
-    // Agregar token si existe
-    const token = localStorage.getItem('auth_token')
-    if (token) {
-      headers.Authorization = `Bearer ${token}`
     }
 
     const response = await fetch(url, { ...options, headers })
