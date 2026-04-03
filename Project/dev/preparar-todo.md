@@ -1,10 +1,10 @@
 # prepararTodo
 
-## Que significa "prepara todo"
+## Que significa "preparar todo"
 
 Cuando en este proyecto se diga prepara todo, no significa hacer solo el cambio puntual.
 
-Significa revisar y cerrar todo el bloque relacionado en frontend y backend.
+Significa revisar y cerrar todo el bloque relacionado en frontend y backend, incluyendo seguridad, integracion, documentacion y consistencia tecnica.
 
 ## Que se tiene que revisar
 
@@ -19,6 +19,9 @@ Si se pide prepara todo, hay que revisar:
 - archivos @...md
 - README y docs de referencia
 - reglas de nombres en nomenclatura
+- validaciones de entrada y salida
+- seguridad del flujo completo
+- manejo de errores y logs
 
 ## Checklist por capa
 
@@ -28,6 +31,11 @@ Si se pide prepara todo, hay que revisar:
 - paginas y estado de UI
 - llamadas HTTP y manejo de errores
 - contratos esperados desde backend
+- proteccion de rutas si aplica
+- control de permisos y visibilidad por rol
+- sanitizacion basica de datos mostrados en UI
+- no exponer secretos, tokens o datos sensibles en cliente
+- revision de variables de entorno usadas en frontend
 
 ### Backend
 
@@ -35,6 +43,74 @@ Si se pide prepara todo, hay que revisar:
 - middlewares y utilidades compartidas
 - registro en index.module.js y module wiring
 - endpoints y codigos HTTP documentados
+- validacion de entrada en todos los endpoints
+- autorizacion y control de acceso por rol o permiso
+- sanitizacion y normalizacion de datos
+- manejo seguro de errores
+- logs sin exponer datos sensibles
+- proteccion de secretos y variables de entorno
+- revision de consultas para evitar inyecciones
+- revision de ficheros, uploads o rutas dinamicas si existen
+
+## Seguridad, obligatoria en preparar todo
+
+Ademas del cambio funcional, siempre hay que revisar seguridad minima del bloque.
+
+### Validaciones
+
+- validar todos los datos de entrada
+- no confiar en datos del frontend
+- validar params, query, body y headers
+- validar tipos, formatos, enums, ids y rangos
+- rechazar campos no esperados si el caso lo requiere
+
+### Autenticacion y autorizacion
+
+- confirmar si el endpoint es publico o privado
+- revisar si necesita rol, permiso o ownership
+- no dejar endpoints sensibles sin guard o middleware
+- revisar que frontend no muestre acciones no permitidas
+- comprobar que backend no dependa solo de ocultar botones en UI
+
+### Datos sensibles
+
+- no exponer passwords, tokens, secrets o datos internos
+- no devolver stack trace al cliente
+- no loggear credenciales, cookies, tokens o datos personales sensibles
+- revisar respuestas del backend para no filtrar campos de mas
+- revisar mappers o dto de salida
+
+### Variables de entorno y configuracion
+
+- no hardcodear secrets
+- usar `.env` solo donde corresponda
+- no subir archivos sensibles al repositorio
+- revisar `.gitignore`
+- documentar nuevas variables en README o archivo de entorno de ejemplo
+
+### Endpoints y servicios
+
+- revisar codigos HTTP correctos
+- devolver errores consistentes
+- limitar superficie publica innecesaria
+- comprobar que un endpoint no permita operaciones no previstas
+- revisar dependencias externas, timeouts y manejo de fallo
+
+### Base de datos y persistencia
+
+- evitar consultas inseguras o concatenacion manual
+- revisar filtros, paginacion y ordenacion
+- validar ids antes de consultar
+- comprobar integridad minima del dato antes de guardar
+- revisar migraciones o cambios de esquema relacionados
+
+### Archivos y contenido dinamico
+
+- validar nombre, tipo y tamano si hay subida de archivos
+- no confiar en extensiones enviadas por cliente
+- revisar rutas y accesos a ficheros
+- escapar o sanitizar contenido dinamico si puede renderizarse
+- revisar posibles riesgos de XSS si se pinta contenido externo
 
 ## Que se tiene que corregir
 
@@ -48,6 +124,10 @@ Ademas del cambio principal, tambien hay que corregir:
 - wiring incompleto
 - validaciones no conectadas
 - endpoints no documentados
+- permisos no conectados
+- respuestas inseguras o demasiado amplias
+- logs inseguros
+- uso incorrecto de variables sensibles
 
 ## Regla de idioma y nombres
 
@@ -68,6 +148,7 @@ El archivo @project.md debe reflejar:
 - rol de frontend y backend
 - MVP real
 - roadmap recomendado
+- decisiones sensibles de arquitectura y seguridad si afectan al producto
 
 ## Sistema de comentarios
 
@@ -78,6 +159,7 @@ Cada archivo debe:
 - explicar intencion cuando aporte valor
 - marcar decisiones importantes del flujo
 - evitar comentarios obvios
+- indicar riesgos o decisiones de seguridad cuando aplique
 
 Patron visual estandar para todo el proyecto:
 
@@ -89,9 +171,10 @@ Patron visual estandar para todo el proyecto:
 
 Formato recomendado:
 
-- Usar separadores con iguales para ubicar secciones grandes.
-- Usar etiquetas de contexto en JSDoc como @ROUTER, @SERVICE, @CONTROLLER, @USECASE.
-- Mantener bullets cortos dentro del JSDoc.
+- usar separadores con iguales para ubicar secciones grandes
+- usar etiquetas de contexto en JSDoc como @ROUTER, @SERVICE, @CONTROLLER, @USECASE
+- mantener bullets cortos dentro del JSDoc
+- si un archivo toca seguridad, dejarlo indicado en el comentario del archivo
 
 Ejemplo de orden esperado:
 
@@ -102,8 +185,8 @@ Ejemplo de orden esperado:
 
 Regla de alcance:
 
-- Este formato aplica por igual a frontend y backend.
-- Si un archivo es pequeno, se puede simplificar, pero mantener la misma idea.
+- este formato aplica por igual a frontend y backend
+- si un archivo es pequeno, se puede simplificar, pero mantener la misma idea
 
 ### Estructura definida
 
@@ -115,10 +198,11 @@ import { validateRequest } from "../../middlewares/validateRequest.js";
 // ======================= EXPRESS ROUTER ==================================
 
 /**
- * - Define las rutas de autenticacion.
+ * - Define las rutas de autenticacion
  * - Conecta register, login y logout
  * - Delega la logica a sus controllers
  * - Valida register y login antes del controller
+ * - Aplica las reglas de acceso que correspondan
  *
  * Importamos Express Router para definir rutas de autenticacion.
  * @ROUTER | Express Router
@@ -147,14 +231,32 @@ router.post("/login", validateRequest(loginSchema), loginController);
 router.post("/logout", logoutController);
 
 export default router;
+
 ```
 
-## Idea principal
+## Seguridad npm obligatoria
 
-prepara todo significa:
+En este proyecto, "preparar todo" tambien incluye asegurar la configuracion de npm a nivel de proyecto.
 
-- no dejar medias partes
-- no esperar a que pidan cada detalle
-- revisar lo relacionado
-- documentar lo nuevo
-- dejar el bloque listo para el siguiente paso
+Reglas obligatorias:
+
+- crear `.npmrc` en la raiz del proyecto, al lado de `package.json`
+- mantener como minimo:
+  - `ignore-scripts=true`
+- aplicar endurecimiento adicional recomendado:
+  - `audit=true`
+  - `audit-level=high`
+  - `save-exact=true`
+  - `cache=.npm-cache`
+- crear la carpeta local `.npm-cache/`
+- agregar `.npm-cache/` en `.gitignore`
+- aplicar exactamente la misma politica tambien en `adminJsonLens`
+
+Contenido base obligatorio en `.npmrc`:
+
+```ini
+# Seguridad del proyecto:
+# evita ejecutar scripts automaticos al instalar dependencias
+ignore-scripts=true
+```
+

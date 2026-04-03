@@ -19,5 +19,5 @@ Uso en componentes:
 -  Entender conexion entre front y back
 -  Ver video priemro de reactjs
 -  Empezar con el front
--  
+-  Termnar feature 1 s
 ## =================  04/04/2026 =================

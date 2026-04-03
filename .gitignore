@@ -10,6 +10,7 @@ coverage/
 
 # Caches y metadatos de herramientas
 .cache/
+.npm-cache/
 .eslintcache
 .parcel-cache/
 .next/
