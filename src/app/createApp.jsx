@@ -1,3 +1,11 @@
+// ======================= NOTES ==================================
+/**
+ * @FACTORY createApp
+ * Fabrica principal de aplicacion para montar providers globales.
+ *
+ * - Centraliza composicion del arbol raiz de React
+ * - Permite extender setup sin tocar el punto de entrada
+ */
 // ======================= IMPORTS =========================================
 import App from '../App.jsx'
 

@@ -1,3 +1,11 @@
+// ======================= NOTES ==================================
+/**
+ * @SERVICE workspaceApi
+ * Implementacion HTTP para operaciones del workspace JSON.
+ *
+ * - Encapsula endpoints de carga, guardado y utilidades JSON
+ * - Estandariza errores para consumo en capa de aplicacion
+ */
 // ======================= IMPORTS =========================================
 import { apiClient } from '../../../shared/infrastructure/http/apiClient.js'
 

@@ -1,3 +1,11 @@
+// ======================= NOTES ==================================
+/**
+ * @ENTRY main
+ * Punto de arranque del frontend en entorno navegador.
+ *
+ * - Crea la aplicacion desde el factory de `app`
+ * - Monta React sobre el nodo raiz del documento
+ */
 // ======================= IMPORTS =========================================
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'

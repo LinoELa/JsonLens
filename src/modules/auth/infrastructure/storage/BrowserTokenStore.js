@@ -1,3 +1,11 @@
+// ======================= NOTES ==================================
+/**
+ * @SERVICE BrowserTokenStore
+ * Implementacion de persistencia de token en navegador.
+ *
+ * - Guarda, obtiene y elimina token de autenticacion
+ * - Cumple el contrato de TokenStore en infraestructura cliente
+ */
 // ======================= TOKEN STORE ======================================
 /**
  * Almacena tokens en localStorage para persistencia entre sesiones.

@@ -1,3 +1,12 @@
+// ======================= NOTES ==================================
+/**
+ * @CONFIG ESLint
+ * Reglas de lint para estandarizar calidad de codigo en frontend.
+ *
+ * - Activa presets base de JS y React
+ * - Define alcance de archivos y reglas comunes del proyecto
+ */
+// ======================= IMPORTS ==================================
 import js from '@eslint/js'
 import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'

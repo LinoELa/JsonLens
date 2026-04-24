@@ -1,3 +1,11 @@
+// ======================= NOTES ==================================
+/**
+ * @SERVICE authApi
+ * Implementacion HTTP del repositorio de sesion para autenticacion.
+ *
+ * - Ejecuta login, logout y consulta de sesion actual
+ * - Gestiona respuestas 401 para mantener estado de token coherente
+ */
 // ======================= IMPORTS =========================================
 import { apiClient } from '../../../shared/infrastructure/http/apiClient.js'
 

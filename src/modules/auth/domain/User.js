@@ -1,3 +1,11 @@
+// ======================= NOTES ==================================
+/**
+ * @DOMAIN User
+ * Entidad de dominio para representar usuario autenticado.
+ *
+ * - Modela datos basicos de identidad del usuario
+ * - Sirve como contrato entre aplicacion y capa de infraestructura
+ */
 // ======================= IMPORTS =========================================
 // Entidad de usuario simple
 

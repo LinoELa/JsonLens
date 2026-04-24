@@ -25,7 +25,9 @@ Si se pide prepara todo, hay que revisar:
 
 ## Checklist por capa
 
-### Frontend
+### Frontend JsonLens
+
+C:-------\JSONLENS-PROJECT\adminJsonLens
 
 - features, components, hooks, services y utils
 - paginas y estado de UI
@@ -37,7 +39,9 @@ Si se pide prepara todo, hay que revisar:
 - no exponer secretos, tokens o datos sensibles en cliente
 - revision de variables de entorno usadas en frontend
 
-### Backend
+### Backend adminJsonLens
+
+C:---------\JSONLENS-PROJECT\JsonLens
 
 - modules, controllers, dto y services
 - middlewares y utilidades compartidas
@@ -191,43 +195,38 @@ Regla de alcance:
 ### Estructura definida
 
 ```text
+
+// ======================= NOTES ==================================
+/**
+ * Comenta el siguiente archivo de forma clara y concisa.
+ *
+ * - Describe el propósito general del archivo
+ * - Explica qué responsabilidades tiene dentro del módulo
+ * - Resume las funciones o componentes principales sin entrar en demasiado detalle
+ * - Mantén los comentarios cortos, profesionales y fáciles de leer
+ * - Usa un estilo genérico que pueda reutilizarse en otros archivos
+ * - No repitas el código, solo explica su intención
+ *
+ * Devuelve únicamente el bloque de comentario inicial en formato JSDoc.
+ */
 // ======================= IMPORTS =========================================
 import express from "express";
 import { validateRequest } from "../../middlewares/validateRequest.js";
 
-// ======================= EXPRESS ROUTER ==================================
 
-/**
- * - Define las rutas de autenticacion
- * - Conecta register, login y logout
- * - Delega la logica a sus controllers
- * - Valida register y login antes del controller
- * - Aplica las reglas de acceso que correspondan
- *
- * Importamos Express Router para definir rutas de autenticacion.
- * @ROUTER | Express Router
- */
+// ======================= CODEBASE ============================
 
+/*enroutamiento princpal*/
 const router = express.Router();
 
-// ======================= AUTHENTICATION ROUTES ============================
 
-/**
- * Rutas de autenticacion.
- * Este archivo define los endpoints publicos para registrar usuarios
- * e iniciar sesion dentro del modulo de auth.
- *
- * @REGISTER | POST /auth/register
- * @LOGIN | POST /auth/login
- * @LOGOUT | POST /auth/logout
- */
-// Registro de usuarios nuevos.
+/* Registro de usuarios nuevos.*/
 router.post("/register", validateRequest(registerSchema), registerController);
 
-// Login y generacion del token JWT.
+/* Login y generacion del token JWT. */
 router.post("/login", validateRequest(loginSchema), loginController);
 
-// Logout y limpieza de la cookie del token.
+/* Logout y limpieza de la cookie del token. */
 router.post("/logout", logoutController);
 
 export default router;
@@ -259,4 +258,3 @@ Contenido base obligatorio en `.npmrc`:
 # evita ejecutar scripts automaticos al instalar dependencias
 ignore-scripts=true
 ```
-

@@ -1,7 +1,14 @@
-
-
+// ======================= NOTES ==================================
+/**
+ * @CONFIG Config
+ * Configuracion global del frontend para entorno y rutas de API.
+ *
+ * - Normaliza variables de entorno relevantes
+ * - Expone constantes de red y endpoints compartidos
+ * - Centraliza la URL base consumida por la capa HTTP
+ */
 // ============================== IMPORTS =====================================
-// Las variables de entorno se cargan automáticamente desde .env
+// Las variables de entorno se cargan automaticamente desde .env
 
 // ============================ RESPOSABILIDADES ===============================
 /**

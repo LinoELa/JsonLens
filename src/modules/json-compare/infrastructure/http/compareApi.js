@@ -1,3 +1,11 @@
+// ======================= NOTES ==================================
+/**
+ * @SERVICE compareApi
+ * Implementacion HTTP para comparacion y diff de documentos JSON.
+ *
+ * - Ejecuta endpoints de comparacion remota
+ * - Unifica manejo de errores en operaciones del modulo
+ */
 // ======================= IMPORTS =========================================
 import { apiClient } from '../../../shared/infrastructure/http/apiClient.js'
 

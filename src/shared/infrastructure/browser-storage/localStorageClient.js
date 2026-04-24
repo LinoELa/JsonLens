@@ -1,5 +1,13 @@
+// ======================= NOTES ==================================
+/**
+ * @SERVICE localStorageClient
+ * Adaptador minimo para persistencia en navegador.
+ *
+ * - Encapsula acceso a localStorage
+ * - Estandariza parseo y serializacion JSON
+ */
 // ======================= IMPORTS =========================================
-// Pequeño cliente para interactuar con localStorage
+// Pequeno cliente para interactuar con localStorage
 
 export const localStorageClient = {
   get(key){

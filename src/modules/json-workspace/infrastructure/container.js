@@ -1,3 +1,11 @@
+// ======================= NOTES ==================================
+/**
+ * @CONTAINER workspaceContainer
+ * Registro de dependencias del modulo de workspace JSON.
+ *
+ * - Expone la implementacion del repositorio de workspace
+ * - Centraliza el wiring de infraestructura del modulo
+ */
 // ======================= IMPORTS =========================================
 import { workspaceApi } from './http/workspaceApi.js'
 

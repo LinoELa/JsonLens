@@ -1,13 +1,25 @@
+// ======================= NOTES ==================================
+/**
+ * @COMPONENT App
+ * Punto de entrada visual de JsonLens para validar conectividad con el backend.
+ *
+ * - Coordina el estado de conexion del health check
+ * - Muestra feedback de exito o error para diagnostico rapido
+ * - Expone el backend objetivo configurado por entorno
+ */
+// ======================= IMPORTS ==================================
 import React, { useState } from 'react'
 import AppShell from './shared/infrastructure/ui/layouts/AppShell'
 import { apiClient } from './shared/infrastructure/http/apiClient.js'
 import { API_ROUTES, API_BASE_URL } from './config/config.js'
 
+// ======================= SETUP PRINCIPAL ==========================
 export default function App() {
   const [healthData, setHealthData] = useState(null)
   const [connectionState, setConnectionState] = useState('idle')
   const [errorMessage, setErrorMessage] = useState('')
 
+  // Dispara el health check y estandariza el estado de respuesta en UI.
   async function handleHealthCheck() {
     try {
       setConnectionState('loading')
@@ -22,6 +34,7 @@ export default function App() {
     }
   }
 
+  // ======================= BLOQUE DE FLUJO ==========================
   return (
     <AppShell>
       <div style={{ padding: 20 }}>
@@ -41,6 +54,7 @@ export default function App() {
           {connectionState === 'loading' ? 'Comprobando...' : 'Health'}
         </button>
 
+        {/* Estado exitoso: respuesta del backend serializada para inspeccion rapida. */}
         {connectionState === 'success' && healthData && (
           <div style={{ marginTop: 12, color: '#1f7a1f' }}>
             Conexion OK con backend
@@ -60,6 +74,7 @@ export default function App() {
           </div>
         )}
 
+        {/* Estado de error: se muestra mensaje controlado sin romper la pantalla. */}
         {connectionState === 'error' && (
           <div style={{ marginTop: 12, color: '#b42318' }}>
             Error de conexion con backend: {errorMessage}

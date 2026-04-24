@@ -1,3 +1,12 @@
+// ======================= NOTES ==================================
+/**
+ * @SERVICE ApiClient
+ * Cliente HTTP base para la comunicacion con backend.
+ *
+ * - Centraliza metodos HTTP de uso comun
+ * - Homogeneiza parseo de respuesta y errores
+ * - Reduce duplicidad en modulos de infraestructura
+ */
 // ======================= IMPORTS =========================================
 // Cliente HTTP centralizado para toda la app
 
