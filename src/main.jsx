@@ -10,6 +10,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import createApp from './app/createApp.jsx'
+import './index.css'
 
 // ======================= APPLICATION ENTRY ===============================
 

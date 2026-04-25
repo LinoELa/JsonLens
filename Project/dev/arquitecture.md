@@ -182,6 +182,58 @@ Cada módulo contiene **3 capas**:
 - **Container**: Wiring e inyección de dependencias
   - Ensambla domain + application + infrastructure
 
+## ================= UI: Componentes React (donde van) =================
+
+En esta arquitectura, los componentes React **no viven en `domain/` ni en `application/`**. Esas capas deben mantenerse libres de React.
+
+### Ubicaciones oficiales
+
+- **Componentes reutilizables (cross-módulo / design system ligero)**  
+  `src/shared/infrastructure/ui/components/`  
+  Ejemplos: botón base, input base, modal genérico, layout helpers, etc.
+
+- **Layouts base (estructura global de pantalla)**  
+  `src/shared/infrastructure/ui/layouts/`  
+  Ejemplo: `AppShell.jsx`
+
+- **Componentes específicos de un feature (vertical slice)**  
+  `src/modules/<modulo>/infrastructure/ui/components/`  
+  Ejemplos:
+  - `src/modules/auth/infrastructure/ui/components/LoginForm.jsx`
+  - `src/modules/json-workspace/infrastructure/ui/components/JsonEditor.jsx`
+
+- **Páginas / vistas (entry UI del feature)**  
+  `src/modules/<modulo>/infrastructure/ui/pages/`  
+  Ejemplos: `LoginPage.jsx`, `WorkspacePage.jsx`
+
+- **Hooks de UI (estado + orquestación de la página o componentes)**  
+  `src/modules/<modulo>/infrastructure/ui/hooks/`  
+  Ejemplos: `useLoginPage.js`, `useWorkspacePage.js`
+
+- **Raíz de la app (composición mínima, sin lógica de negocio)**  
+  - `src/App.jsx`: componente raíz (ensambla layout y rutas cuando existan)
+  - `src/app/createApp.jsx`: providers globales (router, theme, query client, etc.)
+  - `src/app/router.jsx`: definición central de rutas (cuando se active el router)
+
+### Regla de decisión (rápida)
+
+- Si el componente **solo tiene sentido dentro de un módulo** → `modules/<modulo>/infrastructure/ui/...`
+- Si lo vas a reutilizar en **2+ módulos** o es claramente **UI genérica** → `shared/infrastructure/ui/...`
+- Si el componente empieza a “mezclar” reglas de negocio complejas → extrae lógica a:
+  - `application/` (use cases) o
+  - `infrastructure/http/` (API) o
+  - `infrastructure/ui/hooks/` (orquestación UI)
+
+### Imports con alias `@` (recomendado)
+
+El alias `@` apunta a `src/` (configurado en `vite.config.js` y `jsconfig.json`).
+
+Ejemplos:
+
+- `@/shared/infrastructure/ui/components/MiBoton.jsx`
+- `@/modules/auth/infrastructure/ui/components/LoginForm.jsx`
+- `@/modules/json-workspace/infrastructure/ui/pages/WorkspacePage.jsx`
+
 ## Beneficios de esta estructura
 
 | Beneficio         | Cómo lo logra                                                            |

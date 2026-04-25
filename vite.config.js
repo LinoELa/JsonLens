@@ -1,41 +1,37 @@
 // ======================= NOTES ==================================
 /**
  * @CONFIG Vite
- * Configuracion de desarrollo para frontend React con proxy a backend.
+ * Configuracion de Vite con React, Tailwind y alias absoluto `@`.
  *
- * - Define plugin de React y parametros del dev server
- * - Redirige trafico `/api` al destino configurado por entorno
+ * - Registra plugin de React y Tailwind
+ * - Define alias `@` hacia `src` para imports limpios
+ * - Mantiene servidor dev compatible con localhost e IP de red
  */
 // ======================= IMPORTS =========================================
-import { defineConfig, loadEnv } from 'vite'
+import path from 'path'
+import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite'
 
 // ======================= VITE CONFIG =====================================
-
-/**
- * Configura Vite para levantar el frontend en el puerto 5600
- * y reenviar todo lo que empiece por /api al backend Express.
- *
- * Variable opcional:
- * VITE_API_PROXY_TARGET=http://127.0.0.1:5700
- */
-export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, process.cwd(), '')
-  const apiProxyTarget = env.VITE_API_PROXY_TARGET || 'http://127.0.0.1:5700'
-
-  return {
-    plugins: [react()],
-    server: {
-      host: '127.0.0.1',
-      port: 5600,
-      strictPort: true,
-      proxy: {
-        '/api': {
-          target: apiProxyTarget,
-          changeOrigin: true,
-          secure: false,
-        },
-      },
+export default defineConfig({
+  plugins: [react(), tailwindcss()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
     },
-  }
+  },
+  server: {
+    host: true,
+    port: 5600,
+    strictPort: true,
+    open: true,
+    watch: {
+      usePolling: true,
+      interval: 100,
+    },
+    hmr: {
+      overlay: true,
+    },
+  },
 })

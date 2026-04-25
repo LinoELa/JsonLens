@@ -37,38 +37,32 @@ export default function App() {
   // ======================= BLOQUE DE FLUJO ==========================
   return (
     <AppShell>
-      <div style={{ padding: 20 }}>
-        <h1>JsonLens</h1>
-        <p style={{ marginTop: 8, color: '#666' }}>
-          Backend objetivo: <code>{API_BASE_URL}</code>
+      <div className="mx-auto w-full max-w-3xl space-y-4">
+        <h1 className="text-2xl font-semibold tracking-tight">JsonLens</h1>
+
+        <p className="text-sm text-muted-foreground">
+          Backend objetivo:{' '}
+          <code className="rounded-md border bg-muted px-1.5 py-0.5 text-xs">
+            {API_BASE_URL}
+          </code>
         </p>
-        <button
-          onClick={handleHealthCheck}
-          disabled={connectionState === 'loading'}
-          style={{
-            marginTop: 12,
-            padding: '8px 14px',
-            cursor: connectionState === 'loading' ? 'not-allowed' : 'pointer',
-          }}
-        >
-          {connectionState === 'loading' ? 'Comprobando...' : 'Health'}
-        </button>
+
+        <div>
+          <button
+            type="button"
+            onClick={handleHealthCheck}
+            disabled={connectionState === 'loading'}
+            className="inline-flex h-9 items-center justify-center rounded-md border border-border bg-background px-3 text-sm font-medium shadow-sm transition-colors hover:bg-muted disabled:pointer-events-none disabled:opacity-50"
+          >
+            {connectionState === 'loading' ? 'Comprobando...' : 'Health'}
+          </button>
+        </div>
 
         {/* Estado exitoso: respuesta del backend serializada para inspeccion rapida. */}
         {connectionState === 'success' && healthData && (
-          <div style={{ marginTop: 12, color: '#1f7a1f' }}>
-            Conexion OK con backend
-            <pre
-              style={{
-                marginTop: 8,
-                padding: 12,
-                background: '#f6f8fa',
-                border: '1px solid #e5e7eb',
-                borderRadius: 6,
-                maxWidth: 720,
-                overflowX: 'auto',
-              }}
-            >
+          <div className="space-y-2 text-sm text-green-700 dark:text-green-400">
+            <div className="font-medium">Conexion OK con backend</div>
+            <pre className="max-w-full overflow-x-auto rounded-lg border bg-muted p-3 text-xs">
               {JSON.stringify(healthData, null, 2)}
             </pre>
           </div>
@@ -76,7 +70,7 @@ export default function App() {
 
         {/* Estado de error: se muestra mensaje controlado sin romper la pantalla. */}
         {connectionState === 'error' && (
-          <div style={{ marginTop: 12, color: '#b42318' }}>
+          <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-3 text-sm text-destructive">
             Error de conexion con backend: {errorMessage}
           </div>
         )}

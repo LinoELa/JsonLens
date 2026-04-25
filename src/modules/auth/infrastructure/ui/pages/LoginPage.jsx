@@ -8,7 +8,6 @@
  */
 // ======================= IMPORTS ==================================
 import React from 'react'
-import Placeholder from '../../../shared/infrastructure/ui/components/Placeholder'
 
 // ======================= SETUP PRINCIPAL ==========================
 export default function LoginPage(){
@@ -16,7 +15,7 @@ export default function LoginPage(){
   return (
     <div style={{padding:20}}>
       <h2>Login</h2>
-      <Placeholder>Formulario de login (implementación de ejemplo)</Placeholder>
+      <p>Formulario de login (implementación de ejemplo)</p>
     </div>
   )
 }
