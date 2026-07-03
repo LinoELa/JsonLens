@@ -1,6 +1,10 @@
 
+## =================  02/04/2026 =================
+1. Pensar en usar las librerías que usan los demás proyectos como https://github.com/freenandes/actuallyexplain/tree/main
+2. Analizar y agregar
+3. Sobre la infraestructura, pensar en cómo está y mirar el código de cómo lo han hecho también
 
-1. Estructurea Front 
+1. Estructurar Front
 2. Conectar Front con Back
 3. Crear un endpoint para obtener los datos de la API
 
@@ -16,8 +20,8 @@ Uso en componentes:
 ## =================  02/04/2026 =================
 - Vamos a limpiar el front end y organizarlo mejor.
 ## =================  03/04/2026 =================
--  Entender conexion entre front y back
--  Ver video priemro de reactjs
--  Empezar con el front
--  Termnar feature 1 s
+- Entender conexión entre front y back
+- Ver video primero de reactjs
+- Empezar con el front
+- Terminar feature 1
 ## =================  04/04/2026 =================
