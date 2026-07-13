@@ -1,14 +1,12 @@
-// ======================= NOTES ==================================
 /**
- * @USECASE FormatJsonUseCase
- * Caso de uso para validar y normalizar texto JSON en formato legible.
- *
- * - Parsea el JSON de entrada
- * - Devuelve salida con indentacion estandar
- * - Lanza error controlado si la entrada no es valida
+ * Caso de uso para formatear JSON legible.
+ * - Parsea y devuelve salida con indentacion estandar
  */
-// ======================= BLOQUE DE FLUJO ==========================
-export function FormatJsonUseCase(jsonText){
-  try{ return JSON.stringify(JSON.parse(jsonText), null, 2) }
-  catch(e){ throw new Error('Invalid JSON') }
+
+export function FormatJsonUseCase(jsonText) {
+  try {
+    return JSON.stringify(JSON.parse(jsonText), null, 2)
+  } catch {
+    throw new Error('Invalid JSON')
+  }
 }

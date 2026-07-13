@@ -1,3 +1,5 @@
 # App
 
-Carpeta `app` contiene la inicialización de la aplicación (mounting), enrutamiento y providers globales (React Router, Contexts, tema, etc.).
+Bootstrap de la aplicacion: montaje inicial, router y providers globales.
+
+Incluye: `createApp.jsx`, `router.jsx`.

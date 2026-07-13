@@ -1,16 +1,7 @@
-// ======================= NOTES ==================================
 /**
- * @ROUTER appRoutes
- * Registro base para rutas de la aplicacion.
- *
- * - Prepara el punto unico de definicion de rutas
- * - Facilita escalar navegacion sin dispersar configuracion
+ * Registro central de rutas de la aplicacion.
+ * - Define rutas publicas y privadas
+ * - Punto unico para escalar navegacion entre modulos
  */
-// ======================= ROUTER PLACEHOLDER ==============================
 
-/**
- * Router principal de la aplicacion.
- * Este archivo queda listo para centralizar rutas cuando se instale
- * la libreria de navegacion elegida.
- */
-export const appRoutes = []
+export const appRoutes = [];

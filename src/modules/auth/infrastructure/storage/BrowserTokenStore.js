@@ -1,16 +1,8 @@
-// ======================= NOTES ==================================
 /**
- * @SERVICE BrowserTokenStore
- * Implementacion de persistencia de token en navegador.
- *
- * - Guarda, obtiene y elimina token de autenticacion
- * - Cumple el contrato de TokenStore en infraestructura cliente
+ * Persistencia de token en navegador.
+ * - Implementa el puerto TokenStore
  */
-// ======================= TOKEN STORE ======================================
-/**
- * Almacena tokens en localStorage para persistencia entre sesiones.
- * Implementa el puerto TokenStore del dominio.
- */
+
 export const BrowserTokenStore = {
   async saveToken(token) {
     if (!token) throw new Error('Token cannot be empty')

@@ -1,20 +1,14 @@
-// ======================= NOTES ==================================
-/**
- * @PAGE WorkspacePage
- * Pantalla base del modulo de workspace para operaciones sobre JSON.
- *
- * - Presenta el entrypoint visual del editor de trabajo
- * - Reserva el espacio para paneles y herramientas del modulo
- */
-// ======================= IMPORTS ==================================
 import React from 'react'
 import Placeholder from '../../../shared/infrastructure/ui/components/Placeholder'
 
-// ======================= SETUP PRINCIPAL ==========================
-export default function WorkspacePage(){
-  // Vista temporal mientras se completa el flujo del workspace.
+/**
+ * Pantalla principal del modulo json-workspace.
+ * - Entrypoint visual del editor de trabajo
+ */
+
+export default function WorkspacePage() {
   return (
-    <div style={{padding:20}}>
+    <div style={{ padding: 20 }}>
       <h2>Workspace</h2>
       <Placeholder>Editor JSON y paneles (implementación ejemplo)</Placeholder>
     </div>

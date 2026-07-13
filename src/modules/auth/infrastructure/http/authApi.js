@@ -1,25 +1,14 @@
-// ======================= NOTES ==================================
-/**
- * @SERVICE authApi
- * Implementacion HTTP del repositorio de sesion para autenticacion.
- *
- * - Ejecuta login, logout y consulta de sesion actual
- * - Gestiona respuestas 401 para mantener estado de token coherente
- */
-// ======================= IMPORTS =========================================
 import { apiClient } from '../../../shared/infrastructure/http/apiClient.js'
 
-// ======================= AUTH API =========================================
-
 /**
- * Cliente HTTP para autenticacion.
- * Implementa el puerto SessionRepository del dominio.
+ * Cliente HTTP de autenticacion.
+ * - Implementa el puerto SessionRepository
  */
+
 export const authApi = {
   async login(email, password) {
     try {
-      const result = await apiClient.post('/api/auth/login', { email, password })
-      return result
+      return await apiClient.post('/api/auth/login', { email, password })
     } catch (error) {
       throw new Error(`Login failed: ${error.message}`)
     }

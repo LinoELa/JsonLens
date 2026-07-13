@@ -1,3 +1,3 @@
 # Infrastructure
 
-Implementaciones concretas de puertos: clientes HTTP, almacenamiento de browser, UI compartida.
+Implementaciones concretas compartidas: clientes HTTP, almacenamiento de browser, UI comun y utils genericos.

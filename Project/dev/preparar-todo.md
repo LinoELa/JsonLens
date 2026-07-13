@@ -22,15 +22,48 @@ Si se pide prepara todo, hay que revisar:
 - validaciones de entrada y salida
 - seguridad del flujo completo
 - manejo de errores y logs
+- coherencia con `project/dev/arquitecture.md` y `project/dev/structure.md`
 
 ## Checklist por capa
 
 ### Frontend JsonLens
 
-C:-------\JSONLENS-PROJECT\adminJsonLens
+`C:\...\JSONLENS-PROJECT\JsonLens`
 
-- features, components, hooks, services y utils
-- paginas y estado de UI
+Referencia de arquitectura: `project/dev/arquitecture.md`
+
+Estructura base:
+
+```text
+src/
+├── app/              # router, providers
+├── shared/           # domain + infrastructure reutilizable
+├── pages/            # public / private (rutas transversales)
+└── modules/
+    └── [modulo]/
+        ├── domain/
+        ├── application/
+        ├── infrastructure/
+        └── ui/
+```
+
+Revisar por capa:
+
+| Capa | Que revisar |
+| ---- | ----------- |
+| **domain** | entidades, puertos, errores de dominio, sin dependencias de React/HTTP |
+| **application** | use cases (`*UseCase.js`), orquestacion, validaciones de negocio |
+| **infrastructure** | APIs (`http/`), storage, `container.js`, wiring completo |
+| **ui** | pages, components, hooks; hooks llaman use cases, no logica de negocio directa |
+| **shared** | `apiClient`, storage, layouts y componentes reutilizables |
+| **app** | router, registro de rutas, providers globales |
+| **pages** | rutas publicas vs privadas segun corresponda |
+
+Revisar ademas:
+
+- imports y exports entre capas (sin ciclos: `ui → application → domain`)
+- `ui` al mismo nivel que `infrastructure`, no dentro
+- paginas de feature en el modulo; paginas transversales en `pages/`
 - llamadas HTTP y manejo de errores
 - contratos esperados desde backend
 - proteccion de rutas si aplica
@@ -38,10 +71,11 @@ C:-------\JSONLENS-PROJECT\adminJsonLens
 - sanitizacion basica de datos mostrados en UI
 - no exponer secretos, tokens o datos sensibles en cliente
 - revision de variables de entorno usadas en frontend
+- carpetas nuevas con su `@...md` (`@modules.md`, `@shared.md`, etc.)
 
 ### Backend adminJsonLens
 
-C:---------\JSONLENS-PROJECT\JsonLens
+`C:\...\JSONLENS-PROJECT\adminJsonLens`
 
 - modules, controllers, dto y services
 - middlewares y utilidades compartidas
@@ -125,13 +159,15 @@ Ademas del cambio principal, tambien hay que corregir:
 - comentarios que no encajan con el codigo real
 - archivos nuevos sin documentar
 - carpetas nuevas sin su @...md
-- wiring incompleto
+- wiring incompleto (`container.js`, router, registro de modulos)
 - validaciones no conectadas
 - endpoints no documentados
 - permisos no conectados
 - respuestas inseguras o demasiado amplias
 - logs inseguros
 - uso incorrecto de variables sensibles
+- logica de negocio metida en componentes o hooks en lugar de use cases
+- UI dentro de `infrastructure/` cuando debe ir en `ui/`
 
 ## Regla de idioma y nombres
 
@@ -161,76 +197,50 @@ La idea no es comentar por comentar.
 Cada archivo debe:
 
 - explicar intencion cuando aporte valor
-- marcar decisiones importantes del flujo
 - evitar comentarios obvios
 - indicar riesgos o decisiones de seguridad cuando aplique
 
-Patron visual estandar para todo el proyecto:
+Formato estandar (corto):
 
-1. separador de bloque para imports
-2. separador de bloque para setup principal
-3. bloque JSDoc corto con intencion del archivo
-4. separador de bloque para rutas o flujo principal
-5. comentarios de linea solo en pasos importantes
+1. imports arriba (si aplica)
+2. JSDoc breve con 1-2 bullets
+3. codigo
 
-Formato recomendado:
+No usar separadores tipo `NOTES`, `IMPORTS`, `BLOQUE DE FLUJO`.
 
-- usar separadores con iguales para ubicar secciones grandes
-- usar etiquetas de contexto en JSDoc como @ROUTER, @SERVICE, @CONTROLLER, @USECASE
-- mantener bullets cortos dentro del JSDoc
-- si un archivo toca seguridad, dejarlo indicado en el comentario del archivo
+### Ejemplo frontend
 
-Ejemplo de orden esperado:
+```javascript
+import App from "../App.jsx";
 
-- IMPORTS
-- SETUP PRINCIPAL
-- BLOQUE DE FLUJO
-- EXPORT
-
-Regla de alcance:
-
-- este formato aplica por igual a frontend y backend
-- si un archivo es pequeno, se puede simplificar, pero mantener la misma idea
-
-### Estructura definida
-
-```text
-
-// ======================= NOTES ==================================
 /**
- * Comenta el siguiente archivo de forma clara y concisa.
- *
- * - Describe el propósito general del archivo
- * - Explica qué responsabilidades tiene dentro del módulo
- * - Resume las funciones o componentes principales sin entrar en demasiado detalle
- * - Mantén los comentarios cortos, profesionales y fáciles de leer
- * - Usa un estilo genérico que pueda reutilizarse en otros archivos
- * - No repitas el código, solo explica su intención
- *
- * Devuelve únicamente el bloque de comentario inicial en formato JSDoc.
+ * Punto de montaje de la aplicacion React.
+ * - Reservado para providers globales (router, context, etc.)
  */
-// ======================= IMPORTS =========================================
+
+export default function createApp() {
+  return <App />;
+}
+```
+
+### Ejemplo backend
+
+```javascript
 import express from "express";
 import { validateRequest } from "../../middlewares/validateRequest.js";
 
+/**
+ * Rutas de autenticacion del modulo auth.
+ * - Registro, login y logout
+ */
 
-// ======================= CODEBASE ============================
-
-/*enroutamiento princpal*/
 const router = express.Router();
 
-
-/* Registro de usuarios nuevos.*/
 router.post("/register", validateRequest(registerSchema), registerController);
-
-/* Login y generacion del token JWT. */
 router.post("/login", validateRequest(loginSchema), loginController);
-
-/* Logout y limpieza de la cookie del token. */
 router.post("/logout", logoutController);
 
 export default router;
-
 ```
 
 ## Seguridad npm obligatoria

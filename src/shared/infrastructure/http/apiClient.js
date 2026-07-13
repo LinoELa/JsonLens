@@ -1,25 +1,11 @@
-// ======================= NOTES ==================================
-/**
- * @SERVICE ApiClient
- * Cliente HTTP base para la comunicacion con backend.
- *
- * - Centraliza metodos HTTP de uso comun
- * - Homogeneiza parseo de respuesta y errores
- * - Reduce duplicidad en modulos de infraestructura
- */
-// ======================= IMPORTS =========================================
-// Cliente HTTP centralizado para toda la app
-
 import { API_BASE_URL } from '../../../config/config.js'
 
-// ======================= API CLIENT =======================================
-
 /**
- * Wrapper robusto de fetch para todas las llamadas HTTP.
- * - Conecta frontend y backend
- * - Maneja errores de forma consistente
- * - Parse automatico de JSON
+ * Cliente HTTP base para comunicacion con backend.
+ * - Centraliza metodos HTTP y parseo de respuestas
+ * - Homogeneiza manejo de errores
  */
+
 export class ApiClient {
   constructor(baseURL = API_BASE_URL) {
     this.baseURL = baseURL
@@ -27,7 +13,7 @@ export class ApiClient {
 
   async _request(path, options = {}) {
     const url = path.startsWith('http') ? path : `${this.baseURL}${path}`
-    
+
     const headers = {
       'Content-Type': 'application/json',
       ...options.headers,
@@ -36,7 +22,6 @@ export class ApiClient {
     const response = await fetch(url, { ...options, headers })
     const contentType = response.headers.get('content-type') || ''
 
-    // Parsear respuesta
     let data
     if (contentType.includes('application/json')) {
       data = await response.json()
@@ -44,7 +29,6 @@ export class ApiClient {
       data = await response.text()
     }
 
-    // Manejar errores HTTP
     if (!response.ok) {
       const error = new Error(data?.message || `HTTP ${response.status}`)
       error.status = response.status
@@ -88,5 +72,4 @@ export class ApiClient {
   }
 }
 
-// ======================= SINGLETON EXPORTADO ===========================
 export const apiClient = new ApiClient(API_BASE_URL)

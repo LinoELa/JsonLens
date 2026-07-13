@@ -1,25 +1,14 @@
-// ======================= NOTES ==================================
-/**
- * @SERVICE workspaceApi
- * Implementacion HTTP para operaciones del workspace JSON.
- *
- * - Encapsula endpoints de carga, guardado y utilidades JSON
- * - Estandariza errores para consumo en capa de aplicacion
- */
-// ======================= IMPORTS =========================================
 import { apiClient } from '../../../shared/infrastructure/http/apiClient.js'
 
-// ======================= WORKSPACE API ====================================
-
 /**
- * Cliente HTTP para operaciones de workspace JSON.
- * Implementa el puerto WorkspaceRepository del dominio.
+ * Cliente HTTP del modulo json-workspace.
+ * - Carga, guardado y utilidades JSON remotas
  */
+
 export const workspaceApi = {
   async loadWorkspace(id) {
     try {
-      const path = `/api/workspace/${id}`
-      return await apiClient.get(path)
+      return await apiClient.get(`/api/workspace/${id}`)
     } catch (error) {
       throw new Error(`Failed to load workspace: ${error.message}`)
     }
@@ -27,8 +16,7 @@ export const workspaceApi = {
 
   async saveWorkspace(id, document) {
     try {
-      const path = `/api/workspace/${id}`
-      return await apiClient.put(path, document)
+      return await apiClient.put(`/api/workspace/${id}`, document)
     } catch (error) {
       throw new Error(`Failed to save workspace: ${error.message}`)
     }
