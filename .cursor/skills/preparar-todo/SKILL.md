@@ -12,7 +12,7 @@ Documento completo: `project/dev/preparar-todo.md`
 ## Revisar siempre
 
 - Código, wiring (`container.js`, router), imports/exports.
-- Coherencia con `arquitecture.md` y `structure.md`.
+- Coherencia con `details-arquitectura.md` y `docs.md`.
 - Archivos y carpetas nuevas con `@...md`.
 - Validación de entradas en cliente.
 - Errores accionables; sin lógica de negocio en pages/components.

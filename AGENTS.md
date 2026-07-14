@@ -15,10 +15,10 @@ Radix (shell) + Tailwind + Monaco (editor) + Ajv + jsondiffpatch + react-resizab
 
 | Documento | Contenido |
 | --------- | --------- |
-| `project/@project.md` | Visión, MVP, stack |
-| `project/dev/arquitecture.md` | Capas del módulo, UI, ejemplos |
-| `project/dev/structure.md` | Carpetas del repo |
-| `project/dev/preparar-todo.md` | Checklist "preparar todo" |
+| `project/docs.md` | Stack, carpetas, dónde poner archivos |
+| `project/details-arquitectura.md` | Reglas de capas, cuándo usar cada una |
+| `project/details-code.md` | Ejemplos de código por capa |
+| `project/notes.md` | Notas del equipo |
 
 ## Reglas generales
 

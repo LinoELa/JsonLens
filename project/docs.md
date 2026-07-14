@@ -1,6 +1,22 @@
 # Estructura del repositorio JsonLens
 
-Referencia complementaria a `arquitecture.md` (arquitectura por módulo).
+Documentación ampliada:
+
+- Reglas de arquitectura → `details-arquitectura.md`
+- Ejemplos de código → `details-code.md`
+
+## Stack
+
+- **React** — UI por componentes
+- **Vite** — Build y dev server
+- **JavaScript** — Lenguaje del frontend
+- **Radix UI** — Primitivos accesibles (tabs, dialogs, menus, tooltips)
+- **Tailwind CSS** — Estilos rápidos y consistentes
+- **Monaco Editor** — Editor de código JSON
+- **Ajv** — Validación JSON con schema
+- **jsondiffpatch** — Comparación y diff entre documentos
+- **react-resizable-panels** — Paneles redimensionables (editor | análisis)
+- **lucide-react** — Iconos del toolbar y UI
 
 ---
 
@@ -43,28 +59,15 @@ src/
 └── assets/               # imagenes importadas desde codigo
 ```
 
-| Carpeta | Responsabilidad |
-| ------- | --------------- |
-| **app** | bootstrap, router, providers |
-| **config** | configuracion global |
-| **shared** | storage, UI comun, utils, errores compartidos |
-| **pages** | paginas transversales (404, landing) |
+| Carpeta     | Responsabilidad                                             |
+| ----------- | ----------------------------------------------------------- |
+| **app**     | bootstrap, router, providers                                |
+| **config**  | configuracion global                                        |
+| **shared**  | storage, UI comun, utils, errores compartidos               |
+| **pages**   | paginas transversales (404, landing)                        |
 | **modules** | cada feature con domain / application / infrastructure / ui |
-| **assets** | recursos importados en componentes |
+| **assets**  | recursos importados en componentes                          |
 
 **No usar `src/components/` suelto.** Los componentes van en `shared/infrastructure/ui/components/` (global) o en `modules/[modulo]/ui/components/` (de feature).
 
 ---
-
-## Regla rapida: donde pongo X?
-
-| Archivo | Ubicacion |
-| ------- | --------- |
-| `LoginPage.jsx` | `modules/auth/ui/pages/` |
-| `JsonEditor.jsx` | `modules/json-workspace/ui/components/` |
-| `Button` reutilizable | `shared/infrastructure/ui/components/` |
-| `localStorageClient.js` | `shared/infrastructure/browser-storage/` |
-| `config.js` | `src/config/` |
-| `formatDate.js` | `shared/infrastructure/utils/` |
-| `FormatJsonUseCase.js` | `modules/json-workspace/application/` |
-| `favicon.svg` | `public/` |

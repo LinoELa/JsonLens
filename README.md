@@ -44,4 +44,4 @@ npm run preview  # previsualizar build
 
 ## Estructura
 
-Ver `project/dev/arquitecture.md` y `project/dev/structure.md`.
+Ver `project/docs.md`, `project/details-arquitectura.md` y `project/details-code.md`.

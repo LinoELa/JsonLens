@@ -9,7 +9,7 @@ Contexto:
 - JsonLens es un editor/analizador de JSON en el navegador.
 - Stack: React, Vite, JavaScript. Sin backend.
 
-Arquitectura (ver `project/dev/arquitecture.md`):
+Arquitectura (ver `project/details-arquitectura.md`):
 - Módulos con `domain`, `application`, `infrastructure`, `ui`.
 - `ui` al mismo nivel que `infrastructure`, no dentro.
 - Componentes globales en `shared/infrastructure/ui/`.
