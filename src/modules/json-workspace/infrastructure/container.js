@@ -1,13 +1,9 @@
-import { workspaceApi } from './http/workspaceApi.js'
-
 /**
  * Wiring del modulo json-workspace.
- * - Expone el repositorio HTTP del workspace
+ * - Punto de ensamblaje del modulo (logica en application/)
  */
 
-export const workspaceContainer = {
-  workspaceRepository: workspaceApi,
-}
+export const workspaceContainer = {}
 
 export function createWorkspaceModule() {
   return workspaceContainer

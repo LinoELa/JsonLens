@@ -1,7 +1,5 @@
 # Shared
 
-Carpeta para piezas reutilizables entre varios modulos: clientes HTTP, storage, componentes UI comunes, utils y errores de dominio compartidos.
+Piezas reutilizables entre modulos: storage del navegador, componentes UI comunes, utils y errores de dominio.
 
-Incluye carpetas: `domain`, `infrastructure` (con `http/`, `browser-storage/`, `ui/`, `utils/`).
-
-Si solo lo usa un modulo, va dentro de ese modulo, no aqui.
+Incluye: `domain`, `infrastructure` (con `browser-storage/`, `ui/`, `utils/`).

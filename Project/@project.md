@@ -1,8 +1,25 @@
-# JsonLens - Proyecto Completo
+# JsonLens - Proyecto
+
+## Stack
+
+| Tecnología | Para qué sirve |
+| ---------- | -------------- |
+| **React** | UI por componentes |
+| **Vite** | Build y dev server |
+| **JavaScript** | Lenguaje del frontend |
+| **Radix UI** | Primitivos accesibles (tabs, dialogs, menus, tooltips) |
+| **Tailwind CSS** | Estilos rápidos y consistentes |
+| **Monaco Editor** | Editor de código JSON |
+| **Ajv** | Validación JSON con schema |
+| **jsondiffpatch** | Comparación y diff entre documentos |
+| **react-resizable-panels** | Paneles redimensionables (editor \| análisis) |
+| **lucide-react** | Iconos del toolbar y UI |
+
+Toda la lógica se ejecuta en el cliente (sin backend).
 
 ## Descripción
 
-Analizador inteligente de JSON. Herramienta para validar, formatear, analizar y comparar archivos JSON con soporte visual avanzado.
+Analizador inteligente de JSON en el navegador. Herramienta para validar, formatear, analizar y comparar archivos JSON con soporte visual.
 
 ## Objetivos
 
@@ -16,34 +33,18 @@ Analizador inteligente de JSON. Herramienta para validar, formatear, analizar y 
 | **Similaridad**   | Calcular porcentaje de coincidencia      |
 | **Visualización** | UI clara con árbol jerárquico            |
 
-## Alcance Completo
+## MVP
 
-### Core (MVP)
 - Validar JSON
 - Formatear JSON
 - Ver estructura en árbol
 - Comparar dos documentos
 - Mostrar diferencias básicas
 
-### Expansiones Futuras
-- Comparar múltiples JSON simultáneamente
-- Calcular porcentaje de similaridad
-- Exportar reportes de análisis
-- Detectar patrones recurrentes
+## Expansiones futuras
+
+- Comparar múltiples JSON
+- Exportar reportes
 - Soporte para archivos grandes
-- Historial de análisis
-- Exportar a CSV/HTML
-- Temas visuales personalizables
-- API pública para integraciones
-
-## Stack General
-
-### Backend (adminJsonLens)
-- Node.js, Express, JavaScript
-- Módulos: core, json-processing
-- Rutas RESTful para cada operación
-
-### Frontend (JsonLens)
-- React, Vite, JavaScript
-- Features: json-process, settings
-- UI modular y responsiva
+- Temas visuales
+- Historial local

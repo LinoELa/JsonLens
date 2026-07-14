@@ -36,7 +36,7 @@ src/
 ├── main.jsx              # arranque React
 ├── App.jsx               # componente raiz
 ├── app/                  # router, createApp, providers
-├── config/               # env, URLs, constantes globales
+├── config/               # env y constantes globales
 ├── shared/               # piezas reutilizables entre modulos
 ├── pages/                # rutas transversales (public / private)
 ├── modules/              # features (auth, json-workspace, etc.)
@@ -47,10 +47,10 @@ src/
 | ------- | --------------- |
 | **app** | bootstrap, router, providers |
 | **config** | configuracion global |
-| **shared** | HTTP, storage, UI comun, utils, errores compartidos |
+| **shared** | storage, UI comun, utils, errores compartidos |
 | **pages** | paginas transversales (404, landing) |
 | **modules** | cada feature con domain / application / infrastructure / ui |
-| **assets** | recursos importados en componentes (`import logo from ...`) |
+| **assets** | recursos importados en componentes |
 
 **No usar `src/components/` suelto.** Los componentes van en `shared/infrastructure/ui/components/` (global) o en `modules/[modulo]/ui/components/` (de feature).
 
@@ -63,9 +63,8 @@ src/
 | `LoginPage.jsx` | `modules/auth/ui/pages/` |
 | `JsonEditor.jsx` | `modules/json-workspace/ui/components/` |
 | `Button` reutilizable | `shared/infrastructure/ui/components/` |
-| `apiClient.js` | `shared/infrastructure/http/` |
+| `localStorageClient.js` | `shared/infrastructure/browser-storage/` |
 | `config.js` | `src/config/` |
 | `formatDate.js` | `shared/infrastructure/utils/` |
 | `FormatJsonUseCase.js` | `modules/json-workspace/application/` |
 | `favicon.svg` | `public/` |
-| `arquitecture.md` | `project/dev/` |

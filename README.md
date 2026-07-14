@@ -1,107 +1,47 @@
 # JsonLens
 
-Estructura inicial del frontend JsonLens. Contiene módulos, utilidades compartidas y archivos de ejemplo.
+Editor y analizador de JSON en el navegador. Validación, formateo, visualización estructural y comparación — todo en el cliente.
 
-Para iniciar (desde la carpeta JsonLens):
+## Stack
 
-```bash
-npm install
-npm run dev
-```
-# JsonLens
+| Tecnología | Para qué sirve |
+| ---------- | -------------- |
+| **React + Vite + JS** | Base del frontend |
+| **Radix UI** | Tabs, dialogs, menus (UI accesible) |
+| **Tailwind CSS** | Estilos |
+| **Monaco Editor** | Editor JSON |
+| **Ajv** | Validación con schema |
+| **jsondiffpatch** | Diff entre documentos |
+| **react-resizable-panels** | Layout de paneles |
+| **lucide-react** | Iconos |
 
-`JsonLens` es la interfaz frontend del proyecto.
-
-## Puertos recomendados
-
-Para evitar conflictos en desarrollo, usa esta convención desde el inicio:
-
-- Backend `adminJsonLens`: `http://localhost:5700`
-- Frontend `JsonLens`: `http://localhost:5600`
-
-Regla práctica:
-
-- Backend: `57xx`
-- Frontend: `56xx`
-
-Su objetivo es ofrecer una herramienta visual, clara y práctica para trabajar con archivos JSON. La aplicación está orientada a facilitar la validación, el formateo, la visualización estructural y la comparación de documentos desde una experiencia sencilla e intuitiva.
-
-## Funcionalidades previstas
-
-El frontend está planteado para cubrir las siguientes capacidades:
-
-- Validación de documentos JSON
-- Formateo automático de contenido JSON
-- Visualización de estructuras jerárquicas
-- Comparación entre varios documentos JSON
-- Detección de diferencias de estructura y valores
-- Identificación de campos añadidos, eliminados o modificados
-- Visualización de similitudes entre documentos JSON
-
-## Objetivo del proyecto
-
-El objetivo de `JsonLens` es convertirse en una aplicación web moderna para analizar y comparar documentos JSON de forma visual. La propuesta busca ofrecer una experiencia más clara, útil y accesible que la de herramientas tradicionales, apoyándose en una interfaz cómoda y en resultados fáciles de interpretar.
-
-## Stack tecnológico
-
-- React
-- Vite
-- JavaScript
-- Monaco Editor
-- Ajv
-- jsondiffpatch
-
-## Estado actual
-
-El proyecto se encuentra en una fase inicial de desarrollo.
-
-La primera meta es construir un MVP funcional que permita:
-
-1. Pegar o cargar un JSON
-2. Validarlo
-3. Formatearlo
-4. Visualizar su estructura
-5. Comparar dos documentos JSON y mostrar diferencias básicas
+Detalle completo en `project/@project.md`.
 
 ## Puesta en marcha
 
-### Instalar dependencias
-
 ```bash
 npm install
-```
-
-### Iniciar en desarrollo
-
-```bash
 npm run dev
 ```
+  
+App en `http://localhost:5173`
 
-### Generar build de producción
+## Funcionalidades previstas
 
-```bash
-npm run build
-```
+- Validación de documentos JSON
+- Formateo automático
+- Visualización de estructuras jerárquicas
+- Comparación entre documentos
+- Detección de diferencias y similitudes
 
-### Previsualizar build
-
-```bash
-npm run preview
-```
-
-## Estructura inicial recomendada
+## Scripts
 
 ```bash
-src/
-  components/
-  pages/
-  hooks/
-  services/
-  utils/
-  App.jsx
-  main.jsx
+npm run dev      # desarrollo
+npm run build    # produccion
+npm run preview  # previsualizar build
 ```
 
-## Relación con el proyecto
+## Estructura
 
-`JsonLens` forma parte del ecosistema principal y trabaja junto al backend `adminJsonLens`, encargado de la validación, el análisis y la comparación de archivos JSON.
+Ver `project/dev/arquitecture.md` y `project/dev/structure.md`.
