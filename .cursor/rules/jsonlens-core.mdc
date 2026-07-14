@@ -1,0 +1,25 @@
+---
+description: Reglas base de JsonLens — editor JSON frontend
+globs:
+  - "**/*.{js,jsx,ts,tsx,json,md,css}"
+alwaysApply: true
+---
+
+Contexto:
+- JsonLens es un editor/analizador de JSON en el navegador.
+- Stack: React, Vite, JavaScript. Sin backend.
+
+Arquitectura (ver `project/dev/arquitecture.md`):
+- Módulos con `domain`, `application`, `infrastructure`, `ui`.
+- `ui` al mismo nivel que `infrastructure`, no dentro.
+- Componentes globales en `shared/infrastructure/ui/`.
+
+Calidad:
+- JSON inválido no rompe la UI; errores con contexto útil.
+- Evitar bloqueos con archivos grandes.
+- Cambios pequeños, verificables y reversibles.
+
+Comunicación:
+- Español técnico y directo.
+- No inventar capacidades no implementadas.
+- Explicar qué cambió y cómo validarlo.

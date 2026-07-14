@@ -1,0 +1,3 @@
+interface:
+  display_name: "Preparar Todo"
+  short_description: "Checklist completo de cierre de bloque en JsonLens"

@@ -1,0 +1,3 @@
+interface:
+  display_name: "JSON Validation"
+  short_description: "Parseo, validación y análisis estructural de JSON"

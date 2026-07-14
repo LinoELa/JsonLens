@@ -1,0 +1,3 @@
+interface:
+  display_name: "JsonLens"
+  short_description: "Arquitectura y desarrollo del editor JSON frontend"
