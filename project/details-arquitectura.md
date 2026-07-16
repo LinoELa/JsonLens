@@ -26,17 +26,31 @@ La idea: **no mezclar toda la lógica dentro de un componente o una page**.
 ## Estructura de un módulo
 
 ```text
-modules/[nombre-modulo]/
-├── domain/           # opcional
-├── application/
-├── infrastructure/   # opcional
-│   ├── storage/
-│   └── container.js
-└── ui/
-    ├── pages/
-    ├── components/
-    └── hooks/
+modules/
+  ├── [nombre-modulo]/                   ← feature (como recomienda React) - json-workspace
+    ├── domain/           # opcional - solo si hay reglas
+    ├── application/      # lógica de negocio (tu decisión; buena para JSON)
+    ├── infrastructure/   # opcional - solo si hay storage
+    │   ├── storage/
+    │   └── container.js
+    └── ui/               # components, hooks, pages
+        ├── pages/
+        ├── components/
+        └── hooks/
 ```
+
+**Reglas Basicas:**
+modules/
+├── json-workspace/ ← feature (como recomienda React)
+│ ├── ui/ ← components, hooks, pages
+│ ├── application/ ← lógica (tu decisión; buena para JSON)
+│ ├── domain/ ← solo si hay reglas
+│ └── infrastructure/ ← solo si hay storage
+│ └── storage/
+└── ui/
+├── pages/
+├── components/
+└── hooks/
 
 **Reglas fijas:**
 

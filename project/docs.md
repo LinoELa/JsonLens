@@ -10,6 +10,7 @@ Documentación ampliada:
 - **React** — UI por componentes
 - **Vite** — Build y dev server
 - **JavaScript** — Lenguaje del frontend
+- **Shadcn UI** — Componentes accesibles y estilizados
 - **Radix UI** — Primitivos accesibles (tabs, dialogs, menus, tooltips)
 - **Tailwind CSS** — Estilos rápidos y consistentes
 - **Monaco Editor** — Editor de código JSON
@@ -59,6 +60,26 @@ src/
 └── assets/               # imagenes importadas desde codigo
 ```
 
+## ui/ — codigo de la aplicacion
+
+```text
+
+src/shared/ui/
+├── layouts/          # Marco de TODA la app
+│   └── AppShell.jsx
+├── components/       # Piezas genéricas reutilizables
+│   ├── Placeholder.jsx
+│   ├── Button.jsx
+│   ├── ErrorMessage.jsx
+│   └── Spinner.jsx
+├── primitives/       # Wrappers de Radix (opcional)
+│   ├── Dialog.jsx
+│   ├── Tabs.jsx
+│   └── Tooltip.jsx
+└── toolbar/          # Solo si el toolbar es GLOBAL (misma barra en toda la app)
+    └── MainToolbar.jsx
+```
+
 | Carpeta     | Responsabilidad                                             |
 | ----------- | ----------------------------------------------------------- |
 | **app**     | bootstrap, router, providers                                |
@@ -68,6 +89,28 @@ src/
 | **modules** | cada feature con domain / application / infrastructure / ui |
 | **assets**  | recursos importados en componentes                          |
 
-**No usar `src/components/` suelto.** Los componentes van en `shared/infrastructure/ui/components/` (global) o en `modules/[modulo]/ui/components/` (de feature).
+**No usar `src/components/` suelto.**
+
+- UI compartida: `shared/ui/` — ver `shared/ui/@ui.md`
+  - `layouts/`, `components/` (tuyos; navegacion = AppSidebar)
+  - `shadcn/{components,lib,hooks}` (CLI; incluye `sidebar`)
+- UI de feature: `modules/[modulo]/ui/`
+- Config shadcn: `components.json`
 
 ---
+
+### Ruta transversal
+
+Una ruta transversal es una ruta que no pertenece a una funcionalidad concreta del negocio, sino que afecta a toda la aplicación.
+
+Ejemplos:
+
+/
+
+Página de inicio.
+
+/login
+
+Puede ser transversal si el acceso afecta a toda la aplicación.
+
+/404
