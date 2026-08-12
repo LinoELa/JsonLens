@@ -8,24 +8,29 @@ Carpetas del repo → `docs.md`
 ## 1. Flujo mínimo (formatear JSON)
 
 ```javascript
-// application/FormatJsonUseCase.js
-export function FormatJsonUseCase(content) {
+// lib/helpers/json/format-json.helper.js
+export function formatJson(content) {
   return JSON.stringify(JSON.parse(content), null, 2);
 }
 
-// ui/hooks/useFormatJson.js
+// pages/private/workspace/hooks/useFormatJson.js
+import { formatJson } from "@/lib/helpers/json";
+
 export function useFormatJson() {
-  const format = (content) => FormatJsonUseCase(content);
+  const format = (content) => formatJson(content);
   return { format };
 }
 
-// ui/components/JsonEditor.jsx
+// pages/private/workspace/components/JsonEditor.jsx
 export function JsonEditor({ onFormat }) {
   return <button onClick={() => onFormat('{"a":1}')}>Formatear</button>;
 }
 
-// ui/pages/WorkspacePage.jsx
-export function WorkspacePage() {
+// pages/private/workspace/WorkspacePage.jsx
+import { useFormatJson } from "./hooks/useFormatJson";
+import { JsonEditor } from "./components/JsonEditor";
+
+export default function WorkspacePage() {
   const { format } = useFormatJson();
   return <JsonEditor onFormat={format} />;
 }
@@ -33,393 +38,112 @@ export function WorkspacePage() {
 
 ---
 
-## 2. domain
-
-### Entidad con reglas
+## 2. Helper de negocio
 
 ```javascript
-// domain/JsonDocument.js
-export function createJsonDocument({ id, name, content, createdAt }) {
-  if (!id) throw new Error("El documento necesita un identificador");
-  if (!name?.trim()) throw new Error("El nombre del documento es obligatorio");
-  JSON.parse(content);
-  return { id, name: name.trim(), content, createdAt };
+// lib/helpers/json/format-json.helper.js
+export function formatJson(jsonText) {
+  try {
+    return JSON.stringify(JSON.parse(jsonText), null, 2);
+  } catch {
+    throw new Error("Invalid JSON");
+  }
 }
 ```
 
-### Contrato (repositorio)
+---
+
+## 3. Persistencia en navegador
 
 ```javascript
-// domain/DocumentRepository.js
-export const DocumentRepository = {
-  save(document) {
-    throw new Error("Método save no implementado");
+// data/browser/localStorageClient.js
+export const localStorageClient = {
+  get(key) {
+    try {
+      return JSON.parse(localStorage.getItem(key));
+    } catch {
+      return null;
+    }
   },
-  findAll() {
-    throw new Error("Método findAll no implementado");
+  set(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
   },
-  findById(id) {
-    throw new Error("Método findById no implementado");
-  },
-  deleteById(id) {
-    throw new Error("Método deleteById no implementado");
+  remove(key) {
+    localStorage.removeItem(key);
   },
 };
 ```
 
-### ❌ Innecesario (solo envuelve JSON.parse)
+---
+
+## 4. Constantes de rutas
 
 ```javascript
-export function ParseJsonDomainService(content) {
-  return JSON.parse(content);
-}
+// lib/constants/routes.constants.js
+export const ROUTES = {
+  home: "/",
+  workspace: "/workspace",
+  compare: "/compare",
+};
 ```
 
 ---
 
-## 3. application
+## 5. Componente UI base
 
-### Simple (sin domain ni infrastructure)
-
-```javascript
-// application/FormatJsonUseCase.js
-export function FormatJsonUseCase(content) {
-  const parsed = JSON.parse(content);
-  return JSON.stringify(parsed, null, 2);
-}
-```
-
-### Con domain y repositorio
-
-```javascript
-// application/SaveDocumentUseCase.js
-import { createJsonDocument } from "../domain/JsonDocument";
-
-export function createSaveDocumentUseCase(documentRepository) {
-  return function SaveDocumentUseCase(input) {
-    const document = createJsonDocument(input);
-    documentRepository.save(document);
-    return document;
-  };
-}
-```
-
-```javascript
-// application/GetDocumentsUseCase.js
-export function createGetDocumentsUseCase(documentRepository) {
-  return function GetDocumentsUseCase() {
-    return documentRepository.findAll();
-  };
-}
+```jsx
+// components/ui/button.jsx — generado por shadcn
+// Importar desde @/components/ui/button
 ```
 
 ---
 
-## 4. infrastructure
+## 6. Componente common
 
-### localStorage
-
-```javascript
-// infrastructure/storage/LocalStorageDocumentRepository.js
-export function createLocalStorageDocumentRepository(storage) {
-  const storageKey = "jsonlens.documents";
-
-  function findAll() {
-    const storedValue = storage.getItem(storageKey);
-    return storedValue ? JSON.parse(storedValue) : [];
-  }
-
-  function save(document) {
-    const documents = findAll();
-    const existingIndex = documents.findIndex((item) => item.id === document.id);
-    if (existingIndex >= 0) documents[existingIndex] = document;
-    else documents.push(document);
-    storage.setItem(storageKey, JSON.stringify(documents));
-  }
-
-  function findById(id) {
-    return findAll().find((document) => document.id === id) ?? null;
-  }
-
-  function deleteById(id) {
-    const documents = findAll().filter((document) => document.id !== id);
-    storage.setItem(storageKey, JSON.stringify(documents));
-  }
-
-  return { save, findAll, findById, deleteById };
-}
-```
-
-### Portapapeles
-
-```javascript
-// infrastructure/browser/ClipboardService.js
-export function createClipboardService(clipboard) {
-  return {
-    copy(text) {
-      return clipboard.writeText(text);
-    },
-  };
-}
-```
-
-### container.js (wiring)
-
-```javascript
-// infrastructure/container.js
-import { createSaveDocumentUseCase } from "../application/SaveDocumentUseCase";
-import { createGetDocumentsUseCase } from "../application/GetDocumentsUseCase";
-import { createLocalStorageDocumentRepository } from "./storage/LocalStorageDocumentRepository";
-
-const documentRepository = createLocalStorageDocumentRepository(window.localStorage);
-
-export const saveDocumentUseCase = createSaveDocumentUseCase(documentRepository);
-export const getDocumentsUseCase = createGetDocumentsUseCase(documentRepository);
-```
-
----
-
-## 5. ui
-
-### Component (tonto)
-
-```javascript
-// ui/components/FormatButton.jsx
-export function FormatButton({ onFormat, disabled }) {
+```jsx
+// components/common/ErrorMessage.jsx
+export default function ErrorMessage({ children }) {
+  if (!children) return null;
   return (
-    <button type="button" onClick={onFormat} disabled={disabled}>
-      Formatear
-    </button>
-  );
-}
-```
-
-### Hook
-
-```javascript
-// ui/hooks/useFormatJson.js
-import { useState } from "react";
-import { FormatJsonUseCase } from "../../application/FormatJsonUseCase";
-
-export function useFormatJson() {
-  const [content, setContent] = useState("");
-  const [formattedContent, setFormattedContent] = useState("");
-  const [error, setError] = useState(null);
-
-  function format() {
-    try {
-      const result = FormatJsonUseCase(content);
-      setFormattedContent(result);
-      setError(null);
-    } catch {
-      setFormattedContent("");
-      setError("El contenido introducido no es un JSON válido");
-    }
-  }
-
-  return { content, formattedContent, error, setContent, format };
-}
-```
-
-### Page delgada
-
-```javascript
-// ui/pages/FormatterPage.jsx
-import { JsonEditor } from "../components/JsonEditor";
-import { useFormatJson } from "../hooks/useFormatJson";
-
-export function FormatterPage() {
-  const { content, formattedContent, error, setContent, format } = useFormatJson();
-
-  return (
-    <main>
-      <h1>Formatear JSON</h1>
-      <JsonEditor
-        content={content}
-        formattedContent={formattedContent}
-        error={error}
-        onContentChange={setContent}
-        onFormat={format}
-      />
-    </main>
-  );
-}
-```
-
-### JsonEditor completo
-
-```javascript
-// ui/components/JsonEditor.jsx
-export function JsonEditor({
-  content,
-  formattedContent,
-  error,
-  onContentChange,
-  onFormat,
-}) {
-  return (
-    <section>
-      <textarea
-        value={content}
-        onChange={(event) => onContentChange(event.target.value)}
-        placeholder="Introduce un JSON"
-      />
-      <button type="button" onClick={onFormat}>
-        Formatear
-      </button>
-      {error && <p role="alert">{error}</p>}
-      <pre>{formattedContent}</pre>
-    </section>
-  );
-}
-```
-
-### ❌ Mal: todo mezclado en la page
-
-```javascript
-function WorkspacePage() {
-  function saveDocument() {
-    const parsed = JSON.parse(content);
-    if (!name.trim()) throw new Error("Nombre obligatorio");
-    const documents = JSON.parse(localStorage.getItem("documents") ?? "[]");
-    documents.push({ name, content: JSON.stringify(parsed) });
-    localStorage.setItem("documents", JSON.stringify(documents));
-  }
-}
-```
-
----
-
-## 6. Hook con container (documentos)
-
-```javascript
-// ui/hooks/useDocuments.js
-import { useEffect, useState } from "react";
-import { getDocumentsUseCase, saveDocumentUseCase } from "../../infrastructure/container";
-
-export function useDocuments() {
-  const [documents, setDocuments] = useState([]);
-  const [error, setError] = useState(null);
-
-  function loadDocuments() {
-    setDocuments(getDocumentsUseCase());
-  }
-
-  function saveDocument(input) {
-    try {
-      saveDocumentUseCase(input);
-      loadDocuments();
-      setError(null);
-    } catch (saveError) {
-      setError(saveError.message);
-    }
-  }
-
-  useEffect(() => {
-    loadDocuments();
-  }, []);
-
-  return { documents, error, saveDocument };
-}
-```
-
-```javascript
-// ui/pages/DocumentsPage.jsx
-import { DocumentList } from "../components/DocumentList";
-import { SaveDocumentForm } from "../components/SaveDocumentForm";
-import { useDocuments } from "../hooks/useDocuments";
-
-export function DocumentsPage() {
-  const { documents, error, saveDocument } = useDocuments();
-
-  return (
-    <main>
-      <h1>Documentos</h1>
-      <SaveDocumentForm onSave={saveDocument} />
-      {error && <p role="alert">{error}</p>}
-      <DocumentList documents={documents} />
-    </main>
+    <p role="alert" className="text-sm text-destructive">
+      {children}
+    </p>
   );
 }
 ```
 
 ---
 
-## 7. Features por complejidad (árboles)
+## 7. Página privada
 
-### Formatear — application + ui
+```jsx
+// pages/private/compare/ComparePage.jsx
+import Placeholder from "@/components/common/Placeholder";
 
-```text
-modules/formatter/
-├── application/
-│   └── FormatJsonUseCase.js
-└── ui/
-    ├── hooks/useFormatJson.js
-    ├── components/JsonEditor.jsx
-    └── pages/FormatterPage.jsx
-```
-
-### Guardar documentos — 4 capas
-
-```text
-modules/documents/
-├── domain/
-│   ├── JsonDocument.js
-│   └── DocumentRepository.js
-├── application/
-│   ├── SaveDocumentUseCase.js
-│   └── GetDocumentsUseCase.js
-├── infrastructure/
-│   ├── storage/LocalStorageDocumentRepository.js
-│   └── container.js
-└── ui/
-    ├── hooks/useDocuments.js
-    ├── components/SaveDocumentForm.jsx
-    ├── components/DocumentList.jsx
-    └── pages/DocumentsPage.jsx
-```
-
-### Modal — solo ui
-
-```javascript
-const [isOpen, setIsOpen] = useState(false);
-```
-
-### Portapapeles — application + infrastructure + ui
-
-```text
-modules/clipboard/
-├── application/CopyJsonUseCase.js
-├── infrastructure/ClipboardService.js
-└── ui/
-    ├── hooks/useCopyJson.js
-    └── components/CopyButton.jsx
-```
-
----
-
-## 8. Router (público / privado)
-
-```javascript
-<Route path="/login" element={<LoginPage />} />
-<Route
-  path="/documents"
-  element={
-    <PrivateRoute>
-      <DocumentsPage />
-    </PrivateRoute>
-  }
-/>
-```
-
----
-
-## 9. Page delgada (referencia)
-
-```javascript
-// ui/pages/WorkspacePage.jsx
-export function WorkspacePage() {
-  const { format, error } = useFormatJson();
-  return <JsonEditor onFormat={format} error={error} />;
+export default function ComparePage() {
+  return (
+    <div className="p-5">
+      <h2 className="mb-3 text-lg font-semibold">Compare</h2>
+      <Placeholder>Comparador JSON</Placeholder>
+    </div>
+  );
 }
+```
+
+---
+
+## 8. Router
+
+```jsx
+// components/router/app-routes.jsx
+import HomePage from "@/pages/public/HomePage";
+import WorkspacePage from "@/pages/private/workspace/WorkspacePage";
+import ComparePage from "@/pages/private/compare/ComparePage";
+import { ROUTES } from "@/lib/constants/routes.constants";
+
+export const appRoutes = [
+  { path: ROUTES.home, element: <HomePage /> },
+  { path: ROUTES.workspace, element: <WorkspacePage /> },
+  { path: ROUTES.compare, element: <ComparePage /> },
+];
 ```

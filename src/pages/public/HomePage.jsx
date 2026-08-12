@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { Button } from "@/shared/ui/shadcn/components/button";
+import { Button } from "@/components/ui/button";
+import { ROUTES } from "@/lib/constants/routes.constants";
 import { FileJson, GitCompare } from "lucide-react";
 
 /**
@@ -16,7 +17,7 @@ export default function HomePage() {
           Edita, valida y formatea JSON en el navegador.
         </p>
         <Button asChild size="lg">
-          <Link to="/workspace">Abrir Workspace</Link>
+          <Link to={ROUTES.workspace}>Abrir Workspace</Link>
         </Button>
       </section>
 
@@ -27,7 +28,7 @@ export default function HomePage() {
           Compara dos documentos JSON y revisa diferencias.
         </p>
         <Button asChild variant="outline" size="lg">
-          <Link to="/compare">Abrir Compare</Link>
+          <Link to={ROUTES.compare}>Abrir Compare</Link>
         </Button>
       </section>
     </div>

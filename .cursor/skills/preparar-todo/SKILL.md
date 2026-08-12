@@ -11,11 +11,11 @@ Documento completo: `project/dev/preparar-todo.md`
 
 ## Revisar siempre
 
-- Código, wiring (`container.js`, router), imports/exports.
+- Código, wiring (`app-routes.jsx`, aliases), imports/exports.
 - Coherencia con `details-arquitectura.md` y `docs.md`.
 - Archivos y carpetas nuevas con `@...md`.
 - Validación de entradas en cliente.
-- Errores accionables; sin lógica de negocio en pages/components.
+- Errores accionables; lógica JSON en `lib/helpers`, no en pages/components.
 
 ## Seguridad frontend
 

@@ -2,304 +2,133 @@
 
 JsonLens es **100% frontend**: validar, formatear, comparar y analizar JSON en el navegador.
 
-| Área   | Detalle                      |
-| ------ | ---------------------------- |
-| Puerto | `5173`                       |
-| Patrón | Hexagonal + vertical slicing |
+| Área   | Detalle                                      |
+| ------ | -------------------------------------------- |
+| Puerto | `5173`                                       |
+| Patrón | Capas frontend (`lib` / `components` / `pages` / `data`) |
 
 Consulta rápida de carpetas → `docs.md`  
-Ejemplos de código → `details-code.md`
+Ejemplos de código → `details-code.md`  
+Referencia completa → `arquitectura-reactjs.md`
 
 ---
 
-## Las 4 capas (en una frase)
-
-- **domain** — Qué es la cosa y qué reglas debe cumplir
-- **application** — Qué acciones puede hacer el usuario
-- **infrastructure** — Cómo se guarda, lee o conecta con el navegador
-- **ui** — Pantallas React (pages, components, hooks)
-
-La idea: **no mezclar toda la lógica dentro de un componente o una page**.
-
----
-
-## Estructura de un módulo
+## Estructura funcional
 
 ```text
-modules/
-  ├── [nombre-modulo]/                   ← feature (como recomienda React) - json-workspace
-    ├── domain/           # opcional - solo si hay reglas
-    ├── application/      # lógica de negocio (tu decisión; buena para JSON)
-    ├── infrastructure/   # opcional - solo si hay storage
-    │   ├── storage/
-    │   └── container.js
-    └── ui/               # components, hooks, pages
-        ├── pages/
-        ├── components/
-        └── hooks/
+src/
+├── config/          # env, app, flags
+├── lib/             # constants, utils, helpers, hooks
+├── components/      # layout, router, ui, common
+├── pages/           # public + private (por feature)
+├── data/            # browser storage (no HTTP de momento)
+├── App.jsx
+└── main.jsx
 ```
 
-**Reglas Basicas:**
-modules/
-├── json-workspace/ ← feature (como recomienda React)
-│ ├── ui/ ← components, hooks, pages
-│ ├── application/ ← lógica (tu decisión; buena para JSON)
-│ ├── domain/ ← solo si hay reglas
-│ └── infrastructure/ ← solo si hay storage
-│ └── storage/
-└── ui/
-├── pages/
-├── components/
-└── hooks/
+**Sin backend:** no hay `data/api` ni Redux obligatorios.  
+`data/browser` sustituye a services HTTP (localStorage, archivos, clipboard).
 
-**Reglas fijas:**
+---
 
-- `ui` va al mismo nivel que `infrastructure`, **no dentro**.
-- La lógica de negocio va en `application/`, no en pages ni components.
-- No crear carpetas vacías solo para “cumplir la plantilla”.
+## Regla clara: dónde va cada cosa
+
+| Tipo | Dónde | Qué es |
+| ---- | ----- | ------ |
+| **utils** | `lib/utils.js` o futuros `lib/utils/*` | Funciones puras, genéricas, sin React ni negocio |
+| **helpers** | `lib/helpers/` | Lógica de negocio JSON/settings |
+| **hooks globales** | `lib/hooks/` | Reutilizables en varios módulos |
+| **hooks privados** | `pages/.../hooks/` | Solo de una pantalla o feature |
+| **data/browser** | `data/browser/` | localStorage, FileReader, clipboard |
+| **components/ui** | `components/ui/` | Visual base (shadcn) |
+| **components/common** | `components/common/` | Reutilizable con sentido de producto |
+| **components/layout** | `components/layout/` | Shell, sidebar, header |
+| **page components** | `pages/.../components/` | Solo de esa página |
 
 ---
 
 ## 4 preguntas (en este orden)
 
-1. ¿Es una **regla** del proyecto? → `domain`
-2. ¿Es una **acción** (formatear, guardar, comparar)? → `application`
-3. ¿Toca **localStorage**, archivos o APIs del navegador? → `infrastructure`
-4. ¿Es **React** (pantalla, botón, modal)? → `ui`
+1. ¿Es configuración global? → `config/`
+2. ¿Es código compartido sin UI? → `lib/` (utils / helpers / hooks / constants)
+3. ¿Toca localStorage, archivos o APIs del navegador? → `data/browser/`
+4. ¿Es React?
+   - Reutilizable → `components/`
+   - De una pantalla → `pages/.../`
 
 ---
 
-## Hexagonal (en 30 segundos)
-
-La app sabe **qué** necesita (guardar un documento), no **cómo** se guarda (localStorage vs IndexedDB).
+## Flujo recomendado por pantalla
 
 ```text
-SaveDocumentUseCase → DocumentRepository → LocalStorageDocumentRepository
+Page (delgada)
+  → hook privado (estado de UI)
+  → helper (negocio JSON)
+  → data/browser (si hay persistencia)
+  → components (ui / common / de página)
 ```
 
-Si cambias el almacenamiento, tocas sobre todo `infrastructure`, no toda la app.
-
----
-
-## Vertical slicing (en 30 segundos)
-
-Cada **feature** vive en su módulo, con sus capas dentro:
-
-```text
-modules/formatter/
-modules/comparator/
-modules/documents/
-```
-
-Si arreglas el comparador, trabajas en `modules/comparator/`, no buscas en carpetas globales de hooks o services.
-
----
-
-## Capa `domain`
-
-**Qué va:** entidades, reglas propias, contratos (repositorios).
-
-**Cuándo SÍ usarla:**
-
-- El documento debe tener id y nombre
-- El nombre no puede estar vacío
-- El contenido debe ser JSON válido antes de guardarse
-
-**Cuándo NO hace falta:**
-
-- Solo llamas a `JSON.parse()` sin reglas extra → va directo en `application`
-- Envolver `JSON.parse` en un “servicio de dominio” sin añadir nada = capa de más
-
-**Pregunta clave:** ¿Esto describe qué es algo o qué reglas debe cumplir?
-
-→ Código de ejemplo en `details-code.md` (sección domain)
-
----
-
-## Capa `application`
-
-**Qué va:** casos de uso (`*UseCase.js`) — formatear, validar, guardar, comparar…
-
-**Qué hace un use case:** recibe datos, aplica reglas, llama repositorios si hace falta, devuelve resultado.
-
-**Qué NO debe hacer:** `useState`, JSX, modales, toasts.
-
-**Cuándo SÍ:** puedes describirlo con un verbo (formatear, guardar, comparar).
-
-**Cuándo NO:** abrir modal, cambiar pestaña, mostrar/ocultar panel → eso es `ui`.
-
-**Pregunta clave:** ¿Es una acción real del usuario o de la app?
-
-→ Código en `details-code.md` (application)
-
----
-
-## Capa `infrastructure`
-
-**Qué va:** localStorage, IndexedDB, portapapeles, lectura/descarga de archivos, `container.js`.
-
-**Cuándo NO hace falta:**
-
-- `JSON.parse`, `JSON.stringify`, `.map`, `.filter` → no son infraestructura (no hablan con el exterior)
-
-**Qué es `container.js`:** conecta use cases con implementaciones concretas (wiring).
-
-**Pregunta clave:** ¿Accede a almacenamiento, archivos o servicios del navegador?
-
-→ Código en `details-code.md` (infrastructure)
-
----
-
-## Capa `ui`
-
-**Qué va:** pages, components, hooks, estado visual.
-
-**El componente** muestra y dispara eventos; **el hook** conecta React con use cases; **la page** une hook + components (delgada).
-
-**Qué puede quedarse en ui:** modal abierto/cerrado, pestaña activa, loading visual.
-
-**Qué NO:** validar reglas de negocio + guardar en localStorage en la misma page.
-
-**Pregunta clave:** ¿Depende de React o de la pantalla?
-
-→ Código en `details-code.md` (ui)
-
----
-
-## No todas las features necesitan las 4 capas
-
-Adapta la estructura a la complejidad real.
-
-### Formatear JSON → `application` + `ui`
-
-No necesita `domain` (sin reglas propias extra) ni `infrastructure` (`JSON.parse` no es storage).
-
-### Guardar documentos → las 4 capas
-
-Hay reglas (domain), acción (application), localStorage (infrastructure), pantalla (ui).
-
-### Abrir un modal → solo `ui`
-
-`useState(false)` basta. Sin use case ni domain.
-
-### Copiar al portapapeles → `application` + `infrastructure` + `ui`
-
-Acción + API del navegador + botón.
-
-→ Árboles de carpetas en `details-code.md` (features por complejidad)
-
----
-
-## Cómo construir una pantalla
-
-**Si primero importa cómo se ve:**
-
-```text
-Page (boceto) → Components → Hook → Use cases → Page final
-```
-
-**Si primero importa la lógica (validar, comparar):**
-
-```text
-Use case → Hook → Component → Page
-```
-
-**Si hay almacenamiento:**
-
-```text
-Contrato → Implementación → Use case → container.js → Hook → UI
-```
-
----
-
-## Dónde va cada página
-
-- Feature concreta → `modules/[modulo]/ui/pages/`
-- 404, home, landing → `src/pages/`
-- Público/privado lo decide el **router**, no la carpeta del módulo
-
-```text
-modules/auth/ui/pages/LoginPage.jsx
-src/pages/NotFoundPage.jsx
-```
-
----
-
-## Flujo de una acción (guardar documento)
-
-```text
-Botón → Hook → SaveDocumentUseCase → createJsonDocument → Repository → localStorage
-```
-
-| Parte          | Responsabilidad      |
-| -------------- | -------------------- |
-| Button         | Click del usuario    |
-| Hook           | Estado y errores     |
-| Use case       | Orquesta la acción   |
-| Domain         | Reglas del documento |
-| Infrastructure | Persistencia real    |
-
-→ Código completo en `details-code.md` (guardar documentos)
+**Qué NO debe hacer la page:** parsear/validar JSON y escribir en localStorage en el mismo archivo.
 
 ---
 
 ## Dependencias permitidas
 
 ```text
-ui → application → domain
-ui → infrastructure/container
-application → domain
-infrastructure → domain
+pages → components, lib, data
+components → lib, components/ui
+lib/helpers → lib/utils, data (opcional)
+data → config (opcional)
 ```
 
 **Prohibido:**
 
-- `domain` importando React u otras capas
-- `application` importando React o `localStorage` directo
-- Lógica de negocio repartida en muchos components
+- Lógica JSON pesada dentro de un component visual
+- Importar pages desde `lib` o `data`
+- Inventar capa HTTP vacía sin backend
 
 ---
 
 ## Qué no hacer
 
 - Toda la lógica en una page
-- Capas vacías “por estética”
-- Un use case por cada función trivial
-- `localStorage` en diez sitios distintos
-- Reglas de negocio dentro de un component
+- Carpetas vacías “por estética”
+- Redux/API sin necesidad real
+- `localStorage` en diez sitios distintos (centralizar en `data/browser`)
+- Mezclar helpers de negocio dentro de `components/ui`
 
 ---
 
 ## Convenciones de nombres
 
-- Use cases: `FormatJsonUseCase.js`
-- Hooks: `useFormatJson.js`
-- Contratos: `DocumentRepository.js`
-- Implementaciones: `LocalStorageDocumentRepository.js`
-- Pages: `FormatterPage.jsx`
+- Helpers: `format-json.helper.js` → `formatJson`
+- Hooks: `useWorkspaceEditor.js`
+- Pages: `WorkspacePage.jsx`
+- Constants: `routes.constants.js`
+- Browser: `localStorageClient.js`
 
 ---
 
 ## Checklist nueva feature
 
 1. ¿Qué acción hace el usuario?
-2. ¿Hay reglas propias? → domain
-3. ¿Hay que persistir? → infrastructure
-4. ¿Qué muestra React?
-5. ¿Page de módulo o transversal?
+2. ¿Es lógica reutilizable? → `lib/helpers`
+3. ¿Hay que persistir? → `data/browser`
+4. ¿Qué muestra React? → `pages/...` + components
+5. ¿Hook global o privado?
 
 ---
 
 ## Ejemplos rápidos de decisión
 
-| Situación                          | Dónde          |
-| ---------------------------------- | -------------- |
-| Nombre de documento no vacío       | domain         |
-| Formatear JSON                     | application    |
-| Escribir en localStorage           | infrastructure |
-| Modal abierto/cerrado              | ui             |
-| Mostrar error en pantalla          | ui             |
-| Solo `JSON.parse` sin reglas extra | application    |
+| Situación | Dónde |
+| --------- | ----- |
+| Formatear JSON | `lib/helpers/json` |
+| Escribir en localStorage | `data/browser` |
+| Modal abierto/cerrado | hook privado o state en page |
+| Botón shadcn | `components/ui` |
+| Lista solo del compare | `pages/private/compare/components` |
+| `useDebounce` | `lib/hooks` |
 
 ---
 

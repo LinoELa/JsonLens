@@ -4,6 +4,7 @@ Documentación ampliada:
 
 - Reglas de arquitectura → `details-arquitectura.md`
 - Ejemplos de código → `details-code.md`
+- Referencia de carpetas → `arquitectura-reactjs.md`
 
 ## Stack
 
@@ -31,6 +32,7 @@ JsonLens/
 ├── tests/          # pruebas
 ├── index.html      # entrada HTML de Vite
 ├── package.json
+├── components.json # aliases shadcn
 └── vite.config.js
 ```
 
@@ -50,67 +52,55 @@ public/
 
 ```text
 src/
-├── main.jsx              # arranque React
-├── App.jsx               # componente raiz
-├── app/                  # router, createApp, providers
-├── config/               # env y constantes globales
-├── shared/               # piezas reutilizables entre modulos
-├── pages/                # rutas transversales (public / private)
-├── modules/              # features (auth, json-workspace, etc.)
-└── assets/               # imagenes importadas desde codigo
+├── main.jsx                 # arranque React
+├── App.jsx                  # providers, layout y rutas
+├── index.css                # estilos globales
+├── config/                  # configuracion global (env, app)
+├── assets/                  # imagenes/iconos importados desde codigo
+├── lib/                     # codigo compartido (sin dependencia de una page)
+│   ├── constants/           # rutas y valores fijos
+│   ├── utils.js             # cn() y utilidades puras (shadcn)
+│   ├── helpers/             # logica de negocio JSON / settings
+│   └── hooks/               # hooks globales reutilizables
+├── components/              # componentes reutilizables
+│   ├── layout/              # shell, sidebar, header
+│   ├── router/              # registro de rutas
+│   ├── ui/                  # shadcn / radix base
+│   └── common/              # piezas de negocio compartidas
+├── pages/                   # pantallas
+│   ├── public/              # home y rutas publicas
+│   └── private/             # workspace, compare, settings…
+└── data/                    # acceso a datos del navegador
+    └── browser/             # localStorage, FileReader, clipboard
 ```
 
-## ui/ — codigo de la aplicacion
+| Carpeta | Responsabilidad |
+| ------- | --------------- |
+| **config** | Valores globales de la app |
+| **lib** | Utils, helpers, hooks y constants compartidos |
+| **components** | UI reutilizable (layout, ui, common, router) |
+| **pages** | Pantallas; hooks/components privados por feature |
+| **data** | Persistencia y APIs del navegador (sin backend) |
+| **assets** | Recursos importados en componentes |
 
-```text
+### Dónde poner UI
 
-src/shared/ui/
-├── layouts/          # Marco de TODA la app
-│   └── AppShell.jsx
-├── components/       # Piezas genéricas reutilizables
-│   ├── Placeholder.jsx
-│   ├── Button.jsx
-│   ├── ErrorMessage.jsx
-│   └── Spinner.jsx
-├── primitives/       # Wrappers de Radix (opcional)
-│   ├── Dialog.jsx
-│   ├── Tabs.jsx
-│   └── Tooltip.jsx
-└── toolbar/          # Solo si el toolbar es GLOBAL (misma barra en toda la app)
-    └── MainToolbar.jsx
-```
+- Base shadcn → `components/ui/`
+- Layout global → `components/layout/`
+- Piezas compartidas con sentido de producto → `components/common/`
+- Solo de una pantalla → `pages/private/[feature]/components/`
 
-| Carpeta     | Responsabilidad                                             |
-| ----------- | ----------------------------------------------------------- |
-| **app**     | bootstrap, router, providers                                |
-| **config**  | configuracion global                                        |
-| **shared**  | storage, UI comun, utils, errores compartidos               |
-| **pages**   | paginas transversales (404, landing)                        |
-| **modules** | cada feature con domain / application / infrastructure / ui |
-| **assets**  | recursos importados en componentes                          |
-
-**No usar `src/components/` suelto.**
-
-- UI compartida: `shared/ui/` — ver `shared/ui/@ui.md`
-  - `layouts/`, `components/` (tuyos; navegacion = AppSidebar)
-  - `shadcn/{components,lib,hooks}` (CLI; incluye `sidebar`)
-- UI de feature: `modules/[modulo]/ui/`
-- Config shadcn: `components.json`
+Config shadcn: `components.json` (aliases `@/components/ui`, `@/lib/utils`, `@/lib/hooks`).
 
 ---
 
-### Ruta transversal
+### Rutas
 
-Una ruta transversal es una ruta que no pertenece a una funcionalidad concreta del negocio, sino que afecta a toda la aplicación.
+| Path | Page |
+| ---- | ---- |
+| `/` | `pages/public/HomePage.jsx` |
+| `/workspace` | `pages/private/workspace/WorkspacePage.jsx` |
+| `/compare` | `pages/private/compare/ComparePage.jsx` |
 
-Ejemplos:
-
-/
-
-Página de inicio.
-
-/login
-
-Puede ser transversal si el acceso afecta a toda la aplicación.
-
-/404
+Constantes: `lib/constants/routes.constants.js`.
+Registro: `components/router/app-routes.jsx`.

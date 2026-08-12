@@ -1,3 +1,3 @@
-# Tests json-settings
+# Tests settings
 
-Carpeta para tests del módulo json-settings.
+Carpeta para tests de preferencias (`lib/helpers/settings`) y persistencia (`data/browser`).

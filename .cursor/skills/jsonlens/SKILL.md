@@ -1,40 +1,41 @@
 ---
 name: jsonlens
-description: Desarrollo de JsonLens — arquitectura modular, UI del editor, flujo de carga/edición/análisis de JSON en el cliente. Usar en tareas de frontend, módulos, pages, hooks y use cases.
+description: Desarrollo de JsonLens — arquitectura modular, UI del editor, flujo de carga/edición/análisis de JSON en el cliente. Usar en tareas de frontend, pages, hooks y helpers.
 ---
 
 # JsonLens — desarrollo
 
 Lee primero si aplica: `project/details-arquitectura.md`, `project/docs.md`.
 
-## Arquitectura por módulo
+## Arquitectura
 
 ```text
-modules/[modulo]/
-├── domain/
-├── application/
-├── infrastructure/   # storage, container.js
-└── ui/               # pages, components, hooks
+src/
+├── config/
+├── lib/            # constants, utils, helpers, hooks
+├── components/     # layout, router, ui, common
+├── pages/          # public + private/[feature]
+└── data/browser/   # localStorage y APIs del navegador
 ```
 
 ## Construir una pantalla
 
 ```text
-Page (boceto) → Components → Hook → Page (final delgada)
+Page (boceto) → Components → Hook privado → Helpers → Page (final delgada)
 ```
 
-Lógica pesada: `Use case → Hook → Component → Page`.
+Lógica pesada: `helper → hook → component → page`.
 
 ## Reglas
 
-- Use cases en `application/`; hooks orquestan, no duplican lógica.
-- Pages transversales (404, home) en `src/pages/`.
-- Pages de feature en `modules/[modulo]/ui/pages/`.
+- Helpers en `lib/helpers/`; hooks de pantalla en `pages/.../hooks/`.
+- Pages públicas/privadas en `src/pages/`.
 - Preferir cambios mínimos al estilo existente.
+- No inventar `data/api` ni Redux sin necesidad.
 
 ## Checklist rápido
 
-- Respeta capas y flujo de dependencias (`ui → application → domain`).
+- Respeta carpetas y flujo (`pages → lib/helpers → data/browser`).
 - Validación y errores en cliente.
 - Sin dependencias pesadas sin motivo.
 - Carpetas nuevas con su `@...md`.

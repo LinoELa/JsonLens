@@ -1,6 +1,6 @@
 ---
 name: json-validation
-description: Validación, parseo seguro, diagnóstico de errores y análisis estructural de JSON en JsonLens. Usar en use cases de validación, formateo, diff y métricas.
+description: Validación, parseo seguro, diagnóstico de errores y análisis estructural de JSON en JsonLens. Usar en helpers de validación, formateo, diff y métricas.
 ---
 
 # JSON — validación y análisis
@@ -25,8 +25,9 @@ description: Validación, parseo seguro, diagnóstico de errores y análisis est
 
 ## Ubicación en el repo
 
-- Lógica: `modules/*/application/*UseCase.js`
-- Entidades: `modules/*/domain/`
+- Lógica: `lib/helpers/json/`
+- Persistencia: `data/browser/`
+- UI de feature: `pages/private/[feature]/`
 
 ## Pruebas mínimas
 

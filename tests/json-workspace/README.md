@@ -1,3 +1,3 @@
-# Tests json-workspace
+# Tests workspace
 
-Carpeta para tests del módulo json-workspace.
+Carpeta para tests de `pages/private/workspace` y `lib/helpers/json` (formateo, documento).

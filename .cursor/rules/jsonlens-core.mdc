@@ -10,9 +10,9 @@ Contexto:
 - Stack: React, Vite, JavaScript. Sin backend.
 
 Arquitectura (ver `project/details-arquitectura.md`):
-- Módulos con `domain`, `application`, `infrastructure`, `ui`.
-- `ui` al mismo nivel que `infrastructure`, no dentro.
-- Componentes globales en `shared/infrastructure/ui/`.
+- Capas: `config`, `lib`, `components`, `pages`, `data/browser`.
+- Lógica JSON en `lib/helpers`; UI base en `components/ui`.
+- Pantallas en `pages/public` y `pages/private/[feature]`.
 
 Calidad:
 - JSON inválido no rompe la UI; errores con contexto útil.

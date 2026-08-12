@@ -1,12 +1,20 @@
 # pages/
 
-Paginas transversales (no pertenecen a un modulo concreto).
+Pantallas de la aplicación.
 
 | Carpeta | Uso |
 | ------- | --- |
-| `public/` | Sin auth (Home, 404…) |
-| `private/` | Con sesion (si aplica) |
+| `public/` | Home y rutas públicas |
+| `private/[feature]/` | Workspace, compare, settings… |
 
-Pages de feature → `modules/[modulo]/…/ui/pages/`.
+Por feature privada se pueden añadir:
 
-Ejemplo: `public/HomePage.jsx` = puerta de entrada (Workspace \| Compare).
+```text
+pages/private/workspace/
+├── WorkspacePage.jsx
+├── components/     # solo de esta pantalla
+└── hooks/          # solo de esta pantalla
+```
+
+Constantes de path → `lib/constants/routes.constants.js`.  
+Registro de rutas → `components/router/app-routes.jsx`.

@@ -1,3 +1,3 @@
-# Tests json-compare
+# Tests compare
 
-Carpeta para tests del módulo json-compare.
+Carpeta para tests de `pages/private/compare` y helpers de comparación en `lib/helpers/json`.
