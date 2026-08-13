@@ -9,7 +9,7 @@ Contexto:
 - JsonLens es un editor/analizador de JSON en el navegador.
 - Stack: React, Vite, JavaScript. Sin backend.
 
-Arquitectura (ver `project/details-arquitectura.md`):
+Arquitectura (ver `project/architecture.md`):
 - Capas: `config`, `lib`, `components`, `pages`, `data/browser`.
 - Lógica JSON en `lib/helpers`; UI base en `components/ui`.
 - Pantallas en `pages/public` y `pages/private/[feature]`.

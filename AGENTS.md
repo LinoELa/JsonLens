@@ -9,20 +9,20 @@ Instrucciones del repositorio para agentes (Cursor, Zed, etc.).
 
 ## Stack UI previsto
 
-Radix (shell) + Tailwind + Monaco (editor) + Ajv + jsondiffpatch + react-resizable-panels + lucide-react. Ver `project/@project.md`.
+Radix (shell) + Tailwind + Monaco (editor) + Ajv + jsondiffpatch + react-resizable-panels + lucide-react. Ver `project/architecture.md`.
 
 ## Docs de referencia
 
 | Documento | Contenido |
 | --------- | --------- |
-| `project/docs.md` | Stack, carpetas, dónde poner archivos |
-| `project/details-arquitectura.md` | Reglas de capas, cuándo usar cada una |
-| `project/details-code.md` | Ejemplos de código por capa |
-| `project/arquitectura-reactjs.md` | Referencia de estructura modular |
-| `project/notes.md` | Notas del equipo |
+| `project/architecture.md` | Stack, carpetas y reglas de arquitectura |
+| `project/code.md` | Ejemplos de código |
+| `project/backlog.md` | Features (`feature/{id}`) — sustituye Trello |
+| `CHANGELOG.md` | Historial de cambios |
 
 ## Reglas generales
 
+- Seguir `project/architecture.md`.
 - Separar: `lib` (helpers/utils/hooks) → `data/browser` → `components` / `pages`.
 - Lógica JSON en `lib/helpers`, no en components ni pages.
 - Manejar JSON inválido sin romper la UI; errores claros y accionables.

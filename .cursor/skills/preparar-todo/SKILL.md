@@ -12,7 +12,7 @@ Documento completo: `project/dev/preparar-todo.md`
 ## Revisar siempre
 
 - Código, wiring (`app-routes.jsx`, aliases), imports/exports.
-- Coherencia con `details-arquitectura.md` y `docs.md`.
+- Coherencia con `architecture.md`.
 - Archivos y carpetas nuevas con `@...md`.
 - Validación de entradas en cliente.
 - Errores accionables; lógica JSON en `lib/helpers`, no en pages/components.

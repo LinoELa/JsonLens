@@ -5,7 +5,7 @@ description: Desarrollo de JsonLens — arquitectura modular, UI del editor, flu
 
 # JsonLens — desarrollo
 
-Lee primero si aplica: `project/details-arquitectura.md`, `project/docs.md`.
+Lee primero si aplica: `project/architecture.md`.
 
 ## Arquitectura
 

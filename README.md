@@ -1,21 +1,6 @@
 # JsonLens
 
-Editor y analizador de JSON en el navegador. Validación, formateo, visualización estructural y comparación — todo en el cliente.
-
-## Stack
-
-| Tecnología | Para qué sirve |
-| ---------- | -------------- |
-| **React + Vite + JS** | Base del frontend |
-| **Radix UI** | Tabs, dialogs, menus (UI accesible) |
-| **Tailwind CSS** | Estilos |
-| **Monaco Editor** | Editor JSON |
-| **Ajv** | Validación con schema |
-| **jsondiffpatch** | Diff entre documentos |
-| **react-resizable-panels** | Layout de paneles |
-| **lucide-react** | Iconos |
-
-Detalle completo en `project/@project.md`.
+Editor y analizador de JSON **100% en el navegador**: validar, formatear, analizar y comparar.
 
 ## Puesta en marcha
 
@@ -23,25 +8,33 @@ Detalle completo en `project/@project.md`.
 npm install
 npm run dev
 ```
-  
-App en `http://localhost:5173`
 
-## Funcionalidades previstas
-
-- Validación de documentos JSON
-- Formateo automático
-- Visualización de estructuras jerárquicas
-- Comparación entre documentos
-- Detección de diferencias y similitudes
+App en `http://127.0.0.1:5173`
 
 ## Scripts
 
 ```bash
 npm run dev      # desarrollo
-npm run build    # produccion
+npm run build    # producción
+npm run lint     # ESLint
 npm run preview  # previsualizar build
 ```
 
-## Estructura
+## Documentación
 
-Ver `project/docs.md`, `project/details-arquitectura.md` y `project/details-code.md`.
+| Doc | Contenido |
+| --- | --------- |
+| [`project/architecture.md`](./project/architecture.md) | Stack, carpetas y reglas |
+| [`project/backlog.md`](./project/backlog.md) | Features (`feature/{id}`) |
+| [`project/code.md`](./project/code.md) | Ejemplos de código |
+| [`CHANGELOG.md`](./CHANGELOG.md) | Cambios del proyecto |
+
+## Stack actual
+
+React · Vite · JavaScript · Tailwind · shadcn/Radix · lucide-react
+
+Previsto más adelante: Monaco, Ajv, jsondiffpatch, paneles redimensionables.
+
+## Funcionalidades (roadmap)
+
+Ver checklist en [`project/backlog.md`](./project/backlog.md). Siguiente: **feature/37** (entrada y validación JSON).
